@@ -1,0 +1,28 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor User as user
+actor DB as db
+
+note "今回対応" as this
+rectangle コーヒーチケット管理システム {
+  (コーヒーチケット管理) as ticket
+  (ユーザー表示) as um
+  (バリスタ/ドルチェ在庫管理) as stock
+  (おみくじ・占い) as omikuji
+  (チケット1枚消費) as use
+  (チケット7枚購入) as buy
+  user -- use
+  user -- buy
+  use -- ticket
+  buy -- ticket
+  ticket .. this
+  um .. this
+  user -- um
+  um -- db
+  ticket -- db
+  user -- stock
+  stock -- db
+  user -- omikuji
+}
+@enduml
