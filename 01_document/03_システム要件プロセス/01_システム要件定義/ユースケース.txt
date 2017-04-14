@@ -2,27 +2,45 @@
 left to right direction
 skinparam packageStyle rectangle
 actor User as user
+actor AdminUser as admin
 actor DB as db
 
-note "今回対応" as this
+note "今回対応外" as this
 rectangle コーヒーチケット管理システム {
   (コーヒーチケット管理) as ticket
-  (ユーザー表示) as um
+  (ユーザー追加) as userAdd
+  (ユーザー削除) as userDel
+  (ユーザー選択) as userSel
+  (ユーザー管理) as userMgmt
   (バリスタ/ドルチェ在庫管理) as stock
-  (おみくじ・占い) as omikuji
   (チケット1枚消費) as use
   (チケット7枚購入) as buy
+  (種類毎にチケット管理) as cktMgmt
+  (コーヒーチケット売上表示) as dispTicket
+  (コーヒーチケット絞り込み) as ticketQuery
+  (コーヒーチケット集計) as ticketSum
+
   user -- use
   user -- buy
   use -- ticket
   buy -- ticket
-  ticket .. this
-  um .. this
-  user -- um
-  um -- db
+  stock .. this
   ticket -- db
   user -- stock
   stock -- db
-  user -- omikuji
+  user -- cktMgmt
+  cktMgmt -- ticket
+  admin -- userAdd
+  admin -- userDel
+  admin -- userSel
+  userAdd -- userMgmt
+  userDel -- userMgmt
+  userSel -- userMgmt
+  userMgmt -- db
+  user -- ticketQuery
+  user -- dispTicket
+  ticketQuery -- ticketSum
+  dispTicket -- ticketSum
+  ticketSum -- db
 }
 @enduml
