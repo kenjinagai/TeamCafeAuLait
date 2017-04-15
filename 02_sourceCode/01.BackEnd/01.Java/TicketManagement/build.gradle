@@ -30,7 +30,7 @@ jar {
 
 war {
     baseName = 'TicketManagement'
-    version =  '1.0.0'
+    version =  ''
 }
 
 // In this section you declare where to find the dependencies of your project
