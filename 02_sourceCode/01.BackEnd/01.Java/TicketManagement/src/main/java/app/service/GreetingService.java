@@ -1,11 +1,11 @@
-package service;
+package app.service;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
 
-import constant.TicketConstants;
-import model.Greeting;
+import app.constant.TicketConstants;
+import app.model.Greeting;
 
 @Service
 public class GreetingService {

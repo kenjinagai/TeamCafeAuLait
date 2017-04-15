@@ -1,4 +1,4 @@
-package model;
+package app.model;
 
 public class Greeting {
 	private final long id;
