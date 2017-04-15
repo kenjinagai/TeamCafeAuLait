@@ -14,7 +14,7 @@ public class GreetingService {
 
 	public Greeting getGreet(AtomicLong counter, String name){
 		Greeting res = new Greeting(counter.incrementAndGet(), String.format(TicketConstants.TEMPLATE, name));
-		log.info("Greeting: ", res);
+		log.info(res.toString());
 		return res;
 	}
 }

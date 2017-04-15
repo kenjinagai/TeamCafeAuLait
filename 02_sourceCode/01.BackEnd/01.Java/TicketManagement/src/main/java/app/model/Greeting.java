@@ -1,10 +1,9 @@
 package app.model;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class Greeting {
-	@Getter
 	private final long id;
 	private final String name;
 
