@@ -30,6 +30,7 @@ public class TestDbService {
 
             // ★SqlSession を使って SQL を実行する
             List<Map<String, Object>> result = session.selectList("sample.mybatis.selectTest");
+            session.close();
             return result;
         } catch (IOException e) {
             // nop

@@ -10,8 +10,7 @@
                 <!-- sqliteのドライバーを設定 -->
                 <property name="driver" value="org.sqlite.JDBC"/>
                 <!-- dbのファイルパス -->
-                <property name="url" value="jdbc:sqlite:TicketManagement/hoge.db"/>
-                <!-- <property name="url" value="jdbc:sqlite:E:\kenji\12.Git\07.Ticket\02_sourceCode\01.BackEnd\01.Java\TicketManagement\hoge.db"/> -->
+                <property name="url" value="jdbc:sqlite:E:\kenji\12.Git\07.Ticket\02_sourceCode\01.BackEnd\01.Java\TicketManagement\hoge.db"/>
             </dataSource>
         </environment>
     </environments>
