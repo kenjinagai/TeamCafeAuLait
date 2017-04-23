@@ -43,7 +43,9 @@ targetCompatibility = 1.8
 // In this section you declare the dependencies for your production and test code
 dependencies {
     // The production code uses the SLF4J logging API at compile time
-    compile("org.springframework.boot:spring-boot-starter-web")
+    compile 'org.springframework.boot:spring-boot-starter-web'
+ 	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'org.springframework.boot:spring-boot-starter-security'
 
     // Declare the dependency for your favourite test framework you want to use in your tests.
     // TestNG is also supported by the Gradle Test task. Just change the
@@ -51,18 +53,26 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     testCompile('org.springframework.boot:spring-boot-starter-test')
 
-    compile("org.springframework.boot:spring-boot-starter-web")
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     compileOnly("org.projectlombok:lombok:1.16.16")
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
     // https://mvnrepository.com/artifact/org.mybatis/mybatis
-    // compile group: 'org.mybatis', name: 'mybatis', version: '3.4.4'
+    compile group: 'org.mybatis', name: 'mybatis', version: '3.4.4'
     // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
-    // compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.16.1'
+    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.16.1'
     // https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
     compile group: 'org.springframework.security', name: 'spring-security-core', version: '4.2.2.RELEASE'
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
     // for db
-    //compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '1.5.2.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '1.5.2.RELEASE'
+	// https://mvnrepository.com/artifact/javax.persistence/persistence-api
+	compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+	compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'
+	// https://mvnrepository.com/artifact/org.springframework/springloaded
+	compile group: 'org.springframework', name: 'springloaded', version: '1.2.7.RELEASE'
+// https://mvnrepository.com/artifact/net.kemitix/sqlite-dialect
+compile group: 'net.kemitix', name: 'sqlite-dialect', version: '0.1.0'
+
 
 }
