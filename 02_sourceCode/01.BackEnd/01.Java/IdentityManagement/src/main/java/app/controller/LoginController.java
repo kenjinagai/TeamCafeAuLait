@@ -4,6 +4,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,7 @@ public class LoginController {
 
 	@Autowired
 	private LoginService loginService;
+	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
 	/**
 	 * ログイン処理
@@ -42,14 +45,16 @@ public class LoginController {
 	public ResponseEntity<AuthResult> login(@RequestBody LoginInfo loginInfo, HttpServletRequest request,HttpServletResponse response){
 		//認証処理を実行
 		AuthResult authResult = null;
+		ResponseEntity<AuthResult> res = null;
 		try {
 			authResult = loginService.login(loginInfo);
 		} catch (AuthenticationException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
+			//認証失敗時は401エラーを返却
+			res = new ResponseEntity<AuthResult>(authResult,null,HttpStatus.UNAUTHORIZED);
+			logger.error("authError", e.getMessage());
 		} catch (Exception e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
+			res = new ResponseEntity<AuthResult>(authResult,null,HttpStatus.INTERNAL_SERVER_ERROR);
+			logger.error("Exception", e.getMessage());
 		}
 		//認証OKの場合はcsrfトークンをクッキーにセット
 		if(authResult.getUserName() != null){
@@ -64,12 +69,8 @@ public class LoginController {
 					response.addCookie(cookie);
 				}
 			}
-			return new ResponseEntity<>(authResult,null,HttpStatus.OK);
+			res = new ResponseEntity<AuthResult>(authResult,null,HttpStatus.OK);
 		}
-		//認証失敗時は401エラーを返却
-		else{
-			return new ResponseEntity<>(authResult,null,HttpStatus.UNAUTHORIZED);
-		}
+		return res;
 	}
-
 }

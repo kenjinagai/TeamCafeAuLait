@@ -34,66 +34,44 @@ import app.service.LoginUserDetailsService;
  *
  */
 @Configuration
-//@EnableWebMvcSecurity
+// @EnableWebMvcSecurity
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter{
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
-    protected void configure(HttpSecurity http) throws Exception {
-        RequestMatcher csrfRequestMatcher = new RequestMatcher() {
-            // CSRF対象外URL:
-            private AntPathRequestMatcher[] requestMatchers = {
-                    new AntPathRequestMatcher("/api/login")
-            };
+	protected void configure(HttpSecurity http) throws Exception {
+		RequestMatcher csrfRequestMatcher = new RequestMatcher() {
+			// CSRF対象外URL:
+			private AntPathRequestMatcher[] requestMatchers = { new AntPathRequestMatcher("/api/login") };
 
-            @Override
-            public boolean matches(HttpServletRequest request) {
-                for (AntPathRequestMatcher rm : requestMatchers) {
-                    if (rm.matches(request)) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        };
+			@Override
+			public boolean matches(HttpServletRequest request) {
+				for (AntPathRequestMatcher rm : requestMatchers) {
+					if (rm.matches(request)) {
+						return false;
+					}
+				}
+				return true;
+			}
+		};
 
 		http.authorizeRequests()
 			// Anti Match
-			.antMatchers(
-					"/index",
-      				"/api/login",
-      				"/webjars/**",
-      				"/app/index.html"
-//      		).permitAll()
-//      		// Only Admin role can access.
-//      		.antMatchers("/admin","/api/v1/users").hasRole("ADMIN")
-//      		//上記パス意外へのアクセスは全て認証が必要
-//      		.anyRequest().authenticated()
-//      	//ログアウト設定
-//      	.and().logout()
-//      		//ログアウト実行apiを指定
-//      		.logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"));
-//		//http.csrf().disable().regexMatcher("/api/login");
-////		http.csrf().disable().regexMatcher("/api/v1/users");
-	                ).permitAll()
-	                .anyRequest().authenticated()   //上記にマッチしなければ未認証の場合エラー
-	                .and()
-	          	.logout()
-	      		//ログアウト実行apiを指定
-	      		.logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
-	      		.and()
-	                .csrf()
-	                .requireCsrfProtectionMatcher(csrfRequestMatcher)
-	                .csrfTokenRepository(this.csrfTokenRepository());
+			.antMatchers("/index",
+				"/api/login",
+				"/webjars/**",
+				"/app/index.html")
+			.permitAll().
+			anyRequest()
+			.authenticated() // 上記にマッチしなければ未認証の場合エラー
+			.and()
+			// ログアウト実行apiを指定
+			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/logout")).and().csrf()
+			.requireCsrfProtectionMatcher(csrfRequestMatcher).csrfTokenRepository(this.csrfTokenRepository());
+	}
 
-
-      	//CSRF対策
-//      	http.csrf().csrfTokenRepository(csrfTokenRepository())
-//      	.and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
-    }
-
-	//セッションヘッダーにCSRFトークンを設定
-	private CsrfTokenRepository csrfTokenRepository(){
+	// セッションヘッダーにCSRFトークンを設定
+	private CsrfTokenRepository csrfTokenRepository() {
 		HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
 		repository.setHeaderName("X-XSRF-TOKEN");
 		return repository;
@@ -102,16 +80,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	private Filter csrfHeaderFilter() {
 		return new OncePerRequestFilter() {
 			@Override
-			protected void doFilterInternal(HttpServletRequest request,
-					HttpServletResponse response, FilterChain filterChain)
-					throws ServletException, IOException {
-				CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class
-						.getName());
+			protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+					FilterChain filterChain) throws ServletException, IOException {
+				CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
 				if (csrf != null) {
 					Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
 					String token = csrf.getToken();
-					if (cookie == null || token != null
-							&& !token.equals(cookie.getValue())) {
+					if (cookie == null || token != null && !token.equals(cookie.getValue())) {
 						cookie = new Cookie("XSRF-TOKEN", token);
 						cookie.setPath("/");
 						response.addCookie(cookie);
@@ -122,27 +97,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		};
 	}
 
-	//認証処理設定
+	// 認証処理設定
 	@Configuration
 	static class AuthenticationConfiguration extends GlobalAuthenticationConfigurerAdapter {
-		//認証ユーザ取得サービス
+		// 認証ユーザ取得サービス
 		@Autowired
 		private LoginUserDetailsService userDetailService;
 
-		//ユーザパスワードをハッシュ化するEncoder設定
-		//パスワードハッシュに特化したアルゴリズムBCryptを指定
+		// ユーザパスワードをハッシュ化するEncoder設定
+		// パスワードハッシュに特化したアルゴリズムBCryptを指定
 		@Bean
-		PasswordEncoder passwordEncoder(){
+		PasswordEncoder passwordEncoder() {
 			return NoOpPasswordEncoder.getInstance();
-//			return new BCryptPasswordEncoder();
+			// return new BCryptPasswordEncoder();
 		}
 
-		//認証処理設定
+		// 認証処理設定
 		public void init(AuthenticationManagerBuilder auth) throws Exception {
 			auth
-				//認証ユーザ取得サービスを指定
+				// 認証ユーザ取得サービスを指定
 				.userDetailsService(userDetailService)
-				//パスワード照合時のEncoderを指定
+				// パスワード照合時のEncoderを指定
 				.passwordEncoder(passwordEncoder());
 		}
 	}
