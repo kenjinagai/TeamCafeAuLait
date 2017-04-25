@@ -17,13 +17,13 @@ import org.springframework.security.config.annotation.authentication.configurers
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
@@ -40,23 +40,56 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
+        RequestMatcher csrfRequestMatcher = new RequestMatcher() {
+            // CSRF対象外URL:
+            private AntPathRequestMatcher[] requestMatchers = {
+                    new AntPathRequestMatcher("/api/login")
+            };
+
+            @Override
+            public boolean matches(HttpServletRequest request) {
+                for (AntPathRequestMatcher rm : requestMatchers) {
+                    if (rm.matches(request)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        };
+
 		http.authorizeRequests()
 			// Anti Match
 			.antMatchers(
 					"/index",
-      				"/api/login"
-      		).permitAll()
-      		// Only Admin role can access.
-      		.antMatchers("/admin","/api/v1/users").hasRole("ADMIN")
-      		//上記パス意外へのアクセスは全て認証が必要
-      		.anyRequest().authenticated()
-      	//ログアウト設定
-      	.and().logout()
-      		//ログアウト実行apiを指定
-      		.logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
+      				"/api/login",
+      				"/webjars/**",
+      				"/app/index.html"
+//      		).permitAll()
+//      		// Only Admin role can access.
+//      		.antMatchers("/admin","/api/v1/users").hasRole("ADMIN")
+//      		//上記パス意外へのアクセスは全て認証が必要
+//      		.anyRequest().authenticated()
+//      	//ログアウト設定
+//      	.and().logout()
+//      		//ログアウト実行apiを指定
+//      		.logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"));
+//		//http.csrf().disable().regexMatcher("/api/login");
+////		http.csrf().disable().regexMatcher("/api/v1/users");
+	                ).permitAll()
+	                .anyRequest().authenticated()   //上記にマッチしなければ未認証の場合エラー
+	                .and()
+	          	.logout()
+	      		//ログアウト実行apiを指定
+	      		.logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
+	      		.and()
+	                .csrf()
+	                .requireCsrfProtectionMatcher(csrfRequestMatcher)
+	                .csrfTokenRepository(this.csrfTokenRepository());
+
+
       	//CSRF対策
-      	.and().csrf().csrfTokenRepository(csrfTokenRepository())
-      	.and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
+//      	http.csrf().csrfTokenRepository(csrfTokenRepository())
+//      	.and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
     }
 
 	//セッションヘッダーにCSRFトークンを設定
@@ -100,7 +133,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		//パスワードハッシュに特化したアルゴリズムBCryptを指定
 		@Bean
 		PasswordEncoder passwordEncoder(){
-			return new BCryptPasswordEncoder();
+			return NoOpPasswordEncoder.getInstance();
+//			return new BCryptPasswordEncoder();
 		}
 
 		//認証処理設定

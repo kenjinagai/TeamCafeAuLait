@@ -12,6 +12,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -21,10 +23,14 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(nullable=false, columnDefinition="TEXT")
+	@Column(nullable=false, columnDefinition="VARCHAR(255)")
+	private String userId;
+
+	@Column(nullable=false, columnDefinition="VARCHAR(255)")
+	@JsonIgnore
 	private String encodedPassword;
 
-	@Column(nullable=false, columnDefinition="TEXT")
+	@Column(nullable=false, columnDefinition="VARCHAR(50)")
 	private String name;
 
 	@ManyToMany(fetch=FetchType.LAZY)
