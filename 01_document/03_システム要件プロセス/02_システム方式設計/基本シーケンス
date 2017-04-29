@@ -1,0 +1,35 @@
+@startuml
+title 認証シーケンス
+' Participants
+actor User as user
+
+box "ブラウザ" #A9D08E
+    participant Chronium as chr
+end box
+
+box "tomcat8" #F8CBAD
+    participant "フロントエンド\nアプリケーション" as front
+    participant "バックエンド\nアプリケーション" as back
+end box
+
+box "データベース" #FFE699
+    participant "MySQL" as db
+end box
+
+'Sequence
+user -> chr : ユーザー名入力
+chr -> front
+user -> chr : パスワード入力
+chr -> front
+
+user -> chr : ログインボタン押下
+chr -> front
+front -> back : ログイン処理要求\n(HTTP通信)
+back -> db : ユーザー情報取得問合せ
+db --> back : ユーザー情報
+back -> back : 認証
+back --> front : ログイン処理応答\n(HTTP通信)
+front -> front : 画面表示
+front --> chr
+chr --> user : ログイン成功画面表示
+@enduml
