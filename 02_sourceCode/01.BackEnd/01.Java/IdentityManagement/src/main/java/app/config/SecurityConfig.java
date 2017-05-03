@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		RequestMatcher csrfRequestMatcher = new RequestMatcher() {
 			// CSRF対象外URL:
-			private AntPathRequestMatcher[] requestMatchers = { new AntPathRequestMatcher("/api/login") };
+			private AntPathRequestMatcher[] requestMatchers = { new AntPathRequestMatcher("/api/login"), new AntPathRequestMatcher("/api/card/id") };
 
 			@Override
 			public boolean matches(HttpServletRequest request) {
@@ -59,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			// Anti Match
 			.antMatchers("/index",
 				"/api/login",
+				"/api/card/id",
 				"/webjars/**",
 				"/app/index.html")
 			.permitAll().

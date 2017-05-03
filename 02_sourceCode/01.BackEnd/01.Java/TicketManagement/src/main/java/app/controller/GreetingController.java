@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import app.service.db.TestDbService;
 @RestController
 public class GreetingController {
 	private final AtomicLong counter = new AtomicLong();
+	private static Logger log = LoggerFactory.getLogger(GreetingController.class);
 
 	@Autowired
 	GreetingService greetingService;
