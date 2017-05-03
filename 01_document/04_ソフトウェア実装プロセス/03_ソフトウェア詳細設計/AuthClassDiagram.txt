@@ -1,0 +1,165 @@
+@startuml
+title Auth class diagram
+skinparam classAttributeIconSize 0
+
+' External Class / Interface
+package java.io {
+    interface Serializable
+}
+
+package org.springframework.security.core.userdetails {
+    class User
+}
+
+package org.springframework.data.jpa.repository {
+    class JpaRepository<User, String> {
+        List<T> findAll()
+        List<T> findAll(Sort sort)
+        List<T> findAll(Iterable<ID> ids)
+        <S extends T> List<S> save(Iterable<S> entities)
+        void flush()
+        <S extends T> S saveAndFlush(S entity)
+        void deleteInBatch(Iterable<T> entities)
+        void deleteAllInBatch()
+        T getOne(ID id)
+    }
+}
+
+package org.springframework.security.config.annotation.web.configuration{
+    class WebSecurityConfigurerAdapter {
+        # void configure(HttpSecurity http)
+    }
+}
+
+package org.springframework.security.config.annotation.authentication.configurers {
+    class GlobalAuthenticationConfigurerAdapter
+}
+
+' Identity management Class / Interface
+
+package app {
+    class Application {
+        +static void main(String[] args)
+    }
+}
+
+package app.config {
+    class SecurityConfig {
+        # void configure(HttpSecurity http)
+        - CsrfTokenRepository csrfTokenRepository()
+        - Filter csrfHeaderFilter()
+    }
+
+    class AuthenticationConfiguration {
+        - LoginUserDetailsService userDetailService
+        ~ PasswordEncoder passwordEncoder()
+        - void init(AuthenticationManagerBuilder auth)
+    }
+}
+
+package app.controller {
+    class LoginRestController {
+        -LoginService loginService
+        @RequestMapping(value="/api/login",method=RequestMethod.POST)
+        +ResponseEntity<AuthResult> login(LoginInfoDTO, HttpServletRequest, HttpServletResponse)
+    }
+
+    class UserRestClient {
+        -UserRepository repository
+        @RequestMapping(value="/api/v1/users",method=RequestMethod.GET)
+        +List<User> findAll()
+    }
+}
+
+package app.model {
+    class LoginUserDetails{
+        -String name
+      	-String password
+      	-List<String> permissions
+      	-Collection<GrantedAuthority> authorities
+        +getter()
+        +setter()
+        +constructor()
+    }
+
+    class AuthResult {
+        -String userName
+        -List<String> permissionList
+        -List<String> rollList
+        +getter()
+        +setter()
+        +constructor()
+    }
+
+    class LoginInfoDTO {
+        -String mailaddress
+        -String password
+        +getter()
+        +setter()
+    }
+}
+
+package app.entity {
+    class Permission {
+        -Integer id
+        -String name
+        -String alias
+        setter()
+        getter()
+    }
+
+    class Role {
+        -Integer id
+        -String name
+        -String alias
+        List<Permission> permissions
+        getter()
+        setter()
+    }
+
+    class User {
+    -String mailaddress
+    -String encodedPassword
+    -String name
+    -List<Role> roles
+
+    }
+}
+
+package app.repository {
+    class UserRepository {
+
+    }
+}
+
+
+package app.service {
+    class LoginUserDetailsService {
+
+    }
+
+    class LoginService {
+        -AuthenticationManager authMgr
+        -{static}Logger logger
+        +AuthResult login()
+    }
+}
+' Relation
+LoginService -down-o LoginRestController
+UserRepository -down-o UserRestClient
+SecurityConfig -up-|> WebSecurityConfigurerAdapter
+AuthenticationConfiguration -up-* SecurityConfig
+AuthenticationConfiguration -up-|> GlobalAuthenticationConfigurerAdapter
+LoginRestController -- AuthResult
+AuthResult -- LoginService
+LoginInfoDTO -- LoginService
+LoginUserDetails -- LoginService
+LoginUserDetails -- LoginUserDetailsService
+Serializable <|-- Permission
+Serializable <|-- Role
+Role -- User
+Serializable <|-- User
+User -- LoginUserDetails
+JpaRepository <|-- UserRepository
+User <|-- LoginUserDetails
+@enduml

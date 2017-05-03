@@ -1,0 +1,10 @@
+sudo bash
+vi /boot/config.txt
+lcd_rotate=2
+
+shutdown -r now
+
+
+# apt-get install rpi-chromium-mods
+
+apt get install iceweasel
