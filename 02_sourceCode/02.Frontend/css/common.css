@@ -3,3 +3,8 @@ body {
   padding-bottom: 40px;
   background-color: #eee;
 }
+
+.ui-keyboard-button {
+    height: 3em;
+    min-width: 3em;
+}
