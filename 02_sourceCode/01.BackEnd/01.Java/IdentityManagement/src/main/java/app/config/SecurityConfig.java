@@ -38,95 +38,107 @@ import app.service.LoginUserDetailsService;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		RequestMatcher csrfRequestMatcher = new RequestMatcher() {
-			// CSRF対象外URL:
-			private AntPathRequestMatcher[] requestMatchers = { new AntPathRequestMatcher("/index.html"), new AntPathRequestMatcher("/login"), new AntPathRequestMatcher("/login/card"),  new AntPathRequestMatcher("/v2/api-docs"), new AntPathRequestMatcher("/swagger-ui.html"), new AntPathRequestMatcher("/card/id"), new AntPathRequestMatcher("/webjars/springfox-swagger-ui/**"), new AntPathRequestMatcher("/webjars/springfox-swagger-ui/**/**"), new AntPathRequestMatcher("/swagger-resources"), new AntPathRequestMatcher("/swagger-resources/configuration/**")};
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        RequestMatcher csrfRequestMatcher = new RequestMatcher() {
+            // CSRF対象外URL:
+            private AntPathRequestMatcher[] requestMatchers = {
+                    new AntPathRequestMatcher("/index.html"),
+                    new AntPathRequestMatcher("/login"), new AntPathRequestMatcher("/login/card"),
+                    new AntPathRequestMatcher("/v2/api-docs"),
+                    new AntPathRequestMatcher("/swagger-ui.html"),
+                    new AntPathRequestMatcher("/card/id"),
+                    new AntPathRequestMatcher("/webjars/springfox-swagger-ui/**"),
+                    new AntPathRequestMatcher("/webjars/springfox-swagger-ui/**/**"),
+                    new AntPathRequestMatcher("/swagger-resources"),
+                    new AntPathRequestMatcher("/swagger-resources/configuration/**") };
 
-			@Override
-			public boolean matches(HttpServletRequest request) {
-				for (AntPathRequestMatcher rm : requestMatchers) {
-					if (rm.matches(request)) {
-						return false;
-					}
-				}
-				return true;
-			}
-		};
+            @Override
+            public boolean matches(HttpServletRequest request) {
+                for (AntPathRequestMatcher rm : requestMatchers) {
+                    if (rm.matches(request)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        };
 
-		http.authorizeRequests()
-			// Anti Match
-			.antMatchers("/index.html",
-				"/login",
-				"/login/card",
-				"/card/id",
-				"/v2/api-docs",
-				"/swagger-ui.html",
-				"/webjars/**",
-				"/webjars/springfox-swagger-ui/**",
-				"/webjars/springfox-swagger-ui/**/**",
-				"/swagger-resources",
-				"/swagger-resources/configuration/**")
-			.permitAll()
-			.anyRequest()
-			.authenticated() // 上記にマッチしなければ未認証の場合エラー
-			.and()
-			// ログアウト実行apiを指定
-			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/logout")).and().csrf()
-			.requireCsrfProtectionMatcher(csrfRequestMatcher).csrfTokenRepository(this.csrfTokenRepository());
-	}
+        http.authorizeRequests()
+                // Anti Match
+                .antMatchers("/index.html",
+                        "/login",
+                        "/login/card",
+                        "/card/id",
+                        "/v2/api-docs",
+                        "/swagger-ui.html",
+                        "/webjars/**",
+                        "/webjars/springfox-swagger-ui/**",
+                        "/webjars/springfox-swagger-ui/**/**",
+                        "/swagger-resources",
+                        "/swagger-resources/configuration/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated() // 上記にマッチしなければ未認証の場合エラー
+                .and()
+                // ログアウト実行apiを指定
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/logout")).and()
+                .csrf()
+                .requireCsrfProtectionMatcher(csrfRequestMatcher)
+                .csrfTokenRepository(this.csrfTokenRepository());
+    }
 
-	// セッションヘッダーにCSRFトークンを設定
-	private CsrfTokenRepository csrfTokenRepository() {
-		HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-		repository.setHeaderName("X-XSRF-TOKEN");
-		return repository;
-	}
+    // セッションヘッダーにCSRFトークンを設定
+    private CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName("X-XSRF-TOKEN");
+        return repository;
+    }
 
-	private Filter csrfHeaderFilter() {
-		return new OncePerRequestFilter() {
-			@Override
-			protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-					FilterChain filterChain) throws ServletException, IOException {
-				CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-				if (csrf != null) {
-					Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
-					String token = csrf.getToken();
-					if (cookie == null || token != null && !token.equals(cookie.getValue())) {
-						cookie = new Cookie("XSRF-TOKEN", token);
-						cookie.setPath("/");
-						response.addCookie(cookie);
-					}
-				}
-				filterChain.doFilter(request, response);
-			}
-		};
-	}
+    private Filter csrfHeaderFilter() {
+        return new OncePerRequestFilter() {
+            @Override
+            protected void doFilterInternal(HttpServletRequest request,
+                    HttpServletResponse response,
+                    FilterChain filterChain) throws ServletException, IOException {
+                CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+                if (csrf != null) {
+                    Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
+                    String token = csrf.getToken();
+                    if (cookie == null || token != null && !token.equals(cookie.getValue())) {
+                        cookie = new Cookie("XSRF-TOKEN", token);
+                        cookie.setPath("/");
+                        response.addCookie(cookie);
+                    }
+                }
+                filterChain.doFilter(request, response);
+            }
+        };
+    }
 
-	// 認証処理設定
-	@Configuration
-	static class AuthenticationConfiguration extends GlobalAuthenticationConfigurerAdapter {
-		// 認証ユーザ取得サービス
-		@Autowired
-		private LoginUserDetailsService userDetailService;
+    // 認証処理設定
+    @Configuration
+    static class AuthenticationConfiguration extends GlobalAuthenticationConfigurerAdapter {
+        // 認証ユーザ取得サービス
+        @Autowired
+        private LoginUserDetailsService userDetailService;
 
-		// ユーザパスワードをハッシュ化するEncoder設定
-		// パスワードハッシュに特化したアルゴリズムBCryptを指定
-		@Bean
-		PasswordEncoder passwordEncoder() {
-			return NoOpPasswordEncoder.getInstance();
-			// return new BCryptPasswordEncoder();
-		}
+        // ユーザパスワードをハッシュ化するEncoder設定
+        // パスワードハッシュに特化したアルゴリズムBCryptを指定
+        @Bean
+        PasswordEncoder passwordEncoder() {
+            return NoOpPasswordEncoder.getInstance();
+            // return new BCryptPasswordEncoder();
+        }
 
-		// 認証処理設定
-		public void init(AuthenticationManagerBuilder auth) throws Exception {
-			auth
-				// 認証ユーザ取得サービスを指定
-				.userDetailsService(userDetailService)
-				// パスワード照合時のEncoderを指定
-				.passwordEncoder(passwordEncoder());
-		}
-	}
+        // 認証処理設定
+        public void init(AuthenticationManagerBuilder auth) throws Exception {
+            auth
+                    // 認証ユーザ取得サービスを指定
+                    .userDetailsService(userDetailService)
+                    // パスワード照合時のEncoderを指定
+                    .passwordEncoder(passwordEncoder());
+        }
+    }
 
 }

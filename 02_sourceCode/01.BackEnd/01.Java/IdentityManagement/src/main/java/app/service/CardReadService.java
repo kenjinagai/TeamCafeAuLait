@@ -40,7 +40,8 @@ public class CardReadService {
                 //Error
             } else {
                 // Read std error
-                String errorMessage = IOUtils.toString(process.getErrorStream(), Charset.defaultCharset());
+                String errorMessage = IOUtils.toString(process.getErrorStream(),
+                        Charset.defaultCharset());
                 log.error("Error Stream: ", errorMessage);
                 throw new CardReadException("Card read error");
             }

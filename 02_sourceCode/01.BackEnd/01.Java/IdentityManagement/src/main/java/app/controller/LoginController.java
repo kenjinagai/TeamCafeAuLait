@@ -42,17 +42,18 @@ public class LoginController {
     /**
      * Login.
      *
-     * @param loginInfo
-     * @param request
-     * @param response
-     * @return
+     * @param loginInfo user id and password
+     * @param HttpServletRequest request
+     * @param HttpServletResponse response
+     * @return ResponseEntity
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "Login with id/passwrod", notes = "Login with user id and password. <br>Return logined user infomation")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = { @ApiResponse(code = 401, message = "Invalid user id or password."),
             @ApiResponse(code = 500, message = "Internal Server Error") })
-    public ResponseEntity<AuthResult> login(@RequestBody LoginInfo loginInfo, HttpServletRequest request,
+    public ResponseEntity<AuthResult> login(@RequestBody LoginInfo loginInfo,
+            HttpServletRequest request,
             HttpServletResponse response) {
         //認証処理を実行
         AuthResult authResult = null;
@@ -64,7 +65,8 @@ public class LoginController {
             res = new ResponseEntity<AuthResult>(authResult, null, HttpStatus.UNAUTHORIZED);
             logger.error("authError", e.getMessage());
         } catch (Exception e) {
-            res = new ResponseEntity<AuthResult>(authResult, null, HttpStatus.INTERNAL_SERVER_ERROR);
+            res = new ResponseEntity<AuthResult>(authResult, null,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
             logger.error("Exception", e.getMessage());
         }
         //認証OKの場合はcsrfトークンをクッキーにセット
@@ -73,7 +75,8 @@ public class LoginController {
             if (csrf != null) {
                 Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
                 String token = csrf.getToken();
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                Authentication authentication = SecurityContextHolder.getContext()
+                        .getAuthentication();
                 if ((cookie == null || token != null && !token.equals(cookie.getValue()))
                         && (authentication != null && authentication.isAuthenticated())) {
                     cookie = new Cookie("XSRF-TOKEN", token);
@@ -87,11 +90,13 @@ public class LoginController {
     }
 
     @RequestMapping(value = "card", method = RequestMethod.POST)
-    @ApiOperation(value = "Login with card", notes = "Login with a smart card." + "<br>Return logined user infomation")
+    @ApiOperation(value = "Login with card", notes = "Login with a smart card."
+            + "<br>Return logined user infomation")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = { @ApiResponse(code = 401, message = "Not found smart card."),
             @ApiResponse(code = 500, message = "Internal Server Error") })
-    public ResponseEntity<AuthResult> loginSmartCard(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<AuthResult> loginSmartCard(HttpServletRequest request,
+            HttpServletResponse response) {
         return new ResponseEntity<AuthResult>(null, null, HttpStatus.CREATED);
     }
 }

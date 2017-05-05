@@ -33,10 +33,10 @@ public class LoginService {
     /**
      * Login.
      *
-     * @param loginInfo
+     * @param loginInfo user id and password
      * @return User Authentication Parameter
-     * @throws AuthenticationException
-     * @throws Exception
+     * @throws AuthenticationException authentication failure
+     * @throws Exception internal error
      */
     public AuthResult login(LoginInfo loginInfo) throws AuthenticationException, Exception {
         // Authentication with username and password.
@@ -47,7 +47,9 @@ public class LoginService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // Get user data.
         LoginUserDetail principal = (LoginUserDetail) authentication.getPrincipal();
-        return new AuthResult(principal.getUsername(), principal.getPermissionList(), principal.getAuthorities()
-                .stream().map(authority -> authority.getAuthority()).collect(Collectors.toList()));
+        return new AuthResult(principal.getUsername(), principal.getPermissionList(),
+                principal.getAuthorities()
+                        .stream().map(authority -> authority.getAuthority())
+                        .collect(Collectors.toList()));
     }
 }

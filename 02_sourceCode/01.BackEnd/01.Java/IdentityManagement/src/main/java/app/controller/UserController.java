@@ -35,7 +35,8 @@ public class UserController {
     @Autowired
     private AuthrizationService authrization;
 
-    @ApiOperation(value = "Get users infomation", notes = "Get users infomation. <br>This endpoint is allowed to call by Admin.")
+    @ApiOperation(value = "Get users infomation", notes = "Get users infomation. "
+            + "<br>This endpoint is allowed to call by Admin.")
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = { @ApiResponse(code = 403, message = "Invalid X-XSRF-TOKEN."),
