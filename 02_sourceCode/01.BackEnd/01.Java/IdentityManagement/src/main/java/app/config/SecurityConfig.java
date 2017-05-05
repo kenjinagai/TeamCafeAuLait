@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		RequestMatcher csrfRequestMatcher = new RequestMatcher() {
 			// CSRF対象外URL:
-			private AntPathRequestMatcher[] requestMatchers = { new AntPathRequestMatcher("/api/login"), new AntPathRequestMatcher("/api/card/id") };
+			private AntPathRequestMatcher[] requestMatchers = { new AntPathRequestMatcher("/index.html"), new AntPathRequestMatcher("/login"), new AntPathRequestMatcher("/login/card"),  new AntPathRequestMatcher("/v2/api-docs"), new AntPathRequestMatcher("/swagger-ui.html"), new AntPathRequestMatcher("/card/id"), new AntPathRequestMatcher("/webjars/springfox-swagger-ui/**"), new AntPathRequestMatcher("/webjars/springfox-swagger-ui/**/**"), new AntPathRequestMatcher("/swagger-resources"), new AntPathRequestMatcher("/swagger-resources/configuration/**")};
 
 			@Override
 			public boolean matches(HttpServletRequest request) {
@@ -57,13 +57,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.authorizeRequests()
 			// Anti Match
-			.antMatchers("/index",
-				"/api/login",
-				"/api/card/id",
+			.antMatchers("/index.html",
+				"/login",
+				"/login/card",
+				"/card/id",
+				"/v2/api-docs",
+				"/swagger-ui.html",
 				"/webjars/**",
-				"/app/index.html")
-			.permitAll().
-			anyRequest()
+				"/webjars/springfox-swagger-ui/**",
+				"/webjars/springfox-swagger-ui/**/**",
+				"/swagger-resources",
+				"/swagger-resources/configuration/**")
+			.permitAll()
+			.anyRequest()
 			.authenticated() // 上記にマッチしなければ未認証の場合エラー
 			.and()
 			// ログアウト実行apiを指定

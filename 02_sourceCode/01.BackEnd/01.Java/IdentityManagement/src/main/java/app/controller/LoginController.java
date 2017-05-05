@@ -28,6 +28,7 @@ import app.service.LoginService;
  *
  */
 @RestController
+@RequestMapping("login")
 public class LoginController {
 
 	@Autowired
@@ -41,7 +42,7 @@ public class LoginController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value="/api/login",method=RequestMethod.POST)
+	@RequestMapping(value="",method=RequestMethod.POST)
 	public ResponseEntity<AuthResult> login(@RequestBody LoginInfo loginInfo, HttpServletRequest request,HttpServletResponse response){
 		//認証処理を実行
 		AuthResult authResult = null;
@@ -69,8 +70,13 @@ public class LoginController {
 					response.addCookie(cookie);
 				}
 			}
-			res = new ResponseEntity<AuthResult>(authResult,null,HttpStatus.OK);
+			res = new ResponseEntity<AuthResult>(authResult,null,HttpStatus.CREATED);
 		}
 		return res;
+	}
+
+	@RequestMapping(value="card", method=RequestMethod.POST)
+	public ResponseEntity<AuthResult> loginSmartCard(HttpServletRequest request,HttpServletResponse response) {
+		return new ResponseEntity<AuthResult>(null, null, HttpStatus.CREATED);
 	}
 }
