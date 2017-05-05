@@ -65,7 +65,7 @@ public class LoginController {
 			logger.error("Exception", e.getMessage());
 		}
 		//認証OKの場合はcsrfトークンをクッキーにセット
-		if(authResult.getUserName() != null){
+		if(authResult != null && authResult.getUserName() != null){
 			CsrfToken csrf = (CsrfToken)request.getAttribute(CsrfToken.class.getName());
 			if(csrf != null){
 				Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
