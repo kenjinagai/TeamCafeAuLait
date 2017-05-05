@@ -13,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
@@ -23,12 +24,15 @@ public class Role implements Serializable {
 
 	@Id
 	@GeneratedValue
+	@ApiModelProperty(value="Role id")
 	private Integer id;
 
 	@Column(nullable=false)
+	@ApiModelProperty(value="Role name")
 	private String name;
 
 	@Column(nullable=false)
+	@ApiModelProperty(value="Role arias")
 	private String alias;
 
 	@ManyToMany(fetch=FetchType.LAZY)

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
@@ -18,11 +19,14 @@ public class Permission implements Serializable {
 
 	@Id
 	@GeneratedValue
+	@ApiModelProperty("Permission id. e.g. create, read, manageUser")
 	private Integer id;
 
 	@Column(nullable=false)
+	@ApiModelProperty("Permission name. e.g. guest, user, admin")
 	private String name;
 
 	@Column(nullable=false)
+	@ApiModelProperty("Permission alias.")
 	private String alias;
 }

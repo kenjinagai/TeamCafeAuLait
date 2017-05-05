@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
@@ -24,13 +25,16 @@ public class User implements Serializable {
 
 	@Id
 	@Column(nullable=false, columnDefinition="VARCHAR(255)")
+	@ApiModelProperty(value="User id")
 	private String userId;
 
 	@Column(nullable=false, columnDefinition="VARCHAR(255)")
 	@JsonIgnore
+	@ApiModelProperty(value="User password")
 	private String encodedPassword;
 
 	@Column(nullable=false, columnDefinition="VARCHAR(50)")
+	@ApiModelProperty("User name")
 	private String name;
 
 	@ManyToMany(fetch=FetchType.LAZY)

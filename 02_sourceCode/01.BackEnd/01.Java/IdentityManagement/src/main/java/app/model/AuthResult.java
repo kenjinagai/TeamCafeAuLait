@@ -2,6 +2,7 @@ package app.model;
 
 import java.util.List;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,10 +16,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthResult {
-	/** ユーザー 名. */
+	@ApiModelProperty("User name")
 	private String userName;
-	/** 権限一覧. */
+
+	@ApiModelProperty("Permission list")
 	private List<String> permissionList;
-	/** 役職一覧. */
+
+	@ApiModelProperty("Role list")
 	private List<String> roleList;
 }
