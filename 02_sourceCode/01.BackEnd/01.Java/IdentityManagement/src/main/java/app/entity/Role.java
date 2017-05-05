@@ -18,28 +18,24 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="role")
+@Table(name = "role")
 public class Role implements Serializable {
-	private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 2L;
 
-	@Id
-	@GeneratedValue
-	@ApiModelProperty(value="Role id")
-	private Integer id;
+    @Id
+    @GeneratedValue
+    @ApiModelProperty(value = "Role id")
+    private Integer id;
 
-	@Column(nullable=false)
-	@ApiModelProperty(value="Role name")
-	private String name;
+    @Column(nullable = false)
+    @ApiModelProperty(value = "Role name")
+    private String name;
 
-	@Column(nullable=false)
-	@ApiModelProperty(value="Role arias")
-	private String alias;
+    @Column(nullable = false)
+    @ApiModelProperty(value = "Role arias")
+    private String alias;
 
-	@ManyToMany(fetch=FetchType.LAZY)
-	@JoinTable(
-			name="role_has_permission",
-			joinColumns=@JoinColumn(name="role_name",referencedColumnName="name"),
-			inverseJoinColumns=@JoinColumn(name="permission_id",referencedColumnName="id")
-			)
-	List<Permission> permissionList;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "role_has_permission", joinColumns = @JoinColumn(name = "role_name", referencedColumnName = "name"), inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
+    List<Permission> permissionList;
 }

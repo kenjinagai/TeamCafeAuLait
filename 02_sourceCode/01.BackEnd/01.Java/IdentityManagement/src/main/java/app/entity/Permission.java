@@ -13,20 +13,20 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="permission")
+@Table(name = "permission")
 public class Permission implements Serializable {
-	private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = 3L;
 
-	@Id
-	@GeneratedValue
-	@ApiModelProperty("Permission id. e.g. create, read, manageUser")
-	private Integer id;
+    @Id
+    @GeneratedValue
+    @ApiModelProperty("Permission id. e.g. create, read, manageUser")
+    private Integer id;
 
-	@Column(nullable=false)
-	@ApiModelProperty("Permission name. e.g. guest, user, admin")
-	private String name;
+    @Column(nullable = false)
+    @ApiModelProperty("Permission name. e.g. guest, user, admin")
+    private String name;
 
-	@Column(nullable=false)
-	@ApiModelProperty("Permission alias.")
-	private String alias;
+    @Column(nullable = false)
+    @ApiModelProperty("Permission alias.")
+    private String alias;
 }

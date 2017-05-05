@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 public class LoginInfo {
-	@ApiModelProperty("User id")
-	private String userId;
+    @ApiModelProperty("User id")
+    private String userId;
 
-	@ApiModelProperty("User password")
-	private String password;
+    @ApiModelProperty("User password")
+    private String password;
 }

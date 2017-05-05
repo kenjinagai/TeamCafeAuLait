@@ -22,28 +22,30 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * デモ用データ取得用コントローラ
- * API単位で認可設定を行う
+ * Get user data.
+ * Only admin user can used.
  *
  */
 @RestController
 public class UserController {
 
-	@Autowired
-	private UserRepository repository;
+    @Autowired
+    private UserRepository repository;
 
-	@Autowired
-	private AuthrizationService authrization;
+    @Autowired
+    private AuthrizationService authrization;
 
-	@ApiOperation(value="Get users infomation", notes="Get users infomation. <br>This endpoint is allowed to call by Admin.")
-	@RequestMapping(value="/users",method=RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	@ApiResponses(value = { @ApiResponse(code = 403, message = "Invalid X-XSRF-TOKEN."),
-			@ApiResponse(code = 500, message = "Internal Server Error")})
-	public ResponseEntity<List<User>> findAll(@ApiParam(value = "Authentication token for XSRF.", required = true) @RequestHeader(value = "X-XSRF-TOKEN") String token, HttpServletRequest request){
-		if(!authrization.isAdmin(request)){
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
-		return new ResponseEntity<List<User>>(repository.findAll(),HttpStatus.OK);
-	}
+    @ApiOperation(value = "Get users infomation", notes = "Get users infomation. <br>This endpoint is allowed to call by Admin.")
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = { @ApiResponse(code = 403, message = "Invalid X-XSRF-TOKEN."),
+            @ApiResponse(code = 500, message = "Internal Server Error") })
+    public ResponseEntity<List<User>> findAll(
+            @ApiParam(value = "Authentication token for XSRF.", required = true) @RequestHeader(value = "X-XSRF-TOKEN") String token,
+            HttpServletRequest request) {
+        if (!authrization.isAdmin(request)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<List<User>>(repository.findAll(), HttpStatus.OK);
+    }
 }

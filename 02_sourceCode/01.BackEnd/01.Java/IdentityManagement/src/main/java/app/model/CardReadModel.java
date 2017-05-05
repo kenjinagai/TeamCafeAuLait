@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class CardReadModel {
-	private String id;
+    private String id;
 
-	public CardReadModel(String id){
-		this.id = id;
-	}
+    public CardReadModel(String id) {
+        this.id = id;
+    }
 }

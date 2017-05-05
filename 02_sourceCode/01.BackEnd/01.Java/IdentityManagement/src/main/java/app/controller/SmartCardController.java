@@ -18,18 +18,18 @@ import app.service.CardReadService;
 @RestController
 public class SmartCardController {
 
-	@Autowired
-	CardReadService cardReadService;
+    @Autowired
+    CardReadService cardReadService;
 
-	private static final Logger logger = LoggerFactory.getLogger(SmartCardController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SmartCardController.class);
 
-	@RequestMapping(value="/card/id", method=RequestMethod.GET)
-	public ResponseEntity<CardReadModel> getCardId(){
-		try {
-			CardReadModel resModel = cardReadService.getIdm();
-			return new ResponseEntity<CardReadModel>(resModel,HttpStatus.OK);
-		} catch (CardReadException | IOException e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    @RequestMapping(value = "/card/id", method = RequestMethod.GET)
+    public ResponseEntity<CardReadModel> getCardId() {
+        try {
+            CardReadModel resModel = cardReadService.getIdm();
+            return new ResponseEntity<CardReadModel>(resModel, HttpStatus.OK);
+        } catch (CardReadException | IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

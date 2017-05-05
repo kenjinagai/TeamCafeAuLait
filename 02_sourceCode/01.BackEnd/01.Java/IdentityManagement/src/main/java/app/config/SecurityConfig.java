@@ -30,7 +30,7 @@ import org.springframework.web.util.WebUtils;
 import app.service.LoginUserDetailsService;
 
 /**
- * ログイン、認証処理の設定クラス
+ * Authentication setting class.
  *
  */
 @Configuration

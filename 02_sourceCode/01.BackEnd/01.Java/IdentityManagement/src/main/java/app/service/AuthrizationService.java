@@ -10,9 +10,9 @@ import app.constant.TicketConstants;
 
 @Service
 public class AuthrizationService {
-	private static final Logger logger = LoggerFactory.getLogger(AuthrizationService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthrizationService.class);
 
-	public boolean isAdmin(HttpServletRequest request){
-		return request.isUserInRole(TicketConstants.ROLE_ADMIN);
-	}
+    public boolean isAdmin(HttpServletRequest request) {
+        return request.isUserInRole(TicketConstants.ROLE_ADMIN);
+    }
 }

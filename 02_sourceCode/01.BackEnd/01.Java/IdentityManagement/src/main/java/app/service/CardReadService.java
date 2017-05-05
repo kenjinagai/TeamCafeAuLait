@@ -14,38 +14,38 @@ import app.model.CardReadModel;
 
 @Service
 public class CardReadService {
-	private static Logger log = LoggerFactory.getLogger(CardReadService.class);
-	private final static String CMD_PYTHON = "python2";
-	private final static String FILE_PYTHON_CARD_READ = "/opt/get-card-id.py";
-	private final static int MILLISECOUND_WAIT_CMD = 3000;
+    private static Logger log = LoggerFactory.getLogger(CardReadService.class);
+    private static final String CMD_PYTHON = "python2";
+    private static final String FILE_PYTHON_CARD_READ = "/opt/get-card-id.py";
+    private static final int MILLISECOUND_WAIT_CMD = 3000;
 
-	public CardReadModel getIdm() throws CardReadException, IOException{
-		try {
-			// Register Python command
-			ProcessBuilder processBuilder = new ProcessBuilder(CMD_PYTHON, FILE_PYTHON_CARD_READ);
+    public CardReadModel getIdm() throws CardReadException, IOException {
+        try {
+            // Register Python command
+            ProcessBuilder processBuilder = new ProcessBuilder(CMD_PYTHON, FILE_PYTHON_CARD_READ);
 
-			Process process = processBuilder.start();
-			process.waitFor(MILLISECOUND_WAIT_CMD, TimeUnit.MILLISECONDS);
+            Process process = processBuilder.start();
+            process.waitFor(MILLISECOUND_WAIT_CMD, TimeUnit.MILLISECONDS);
 
-			// Read std output
-			String idm = IOUtils.toString(process.getInputStream(), Charset.defaultCharset());
+            // Read std output
+            String idm = IOUtils.toString(process.getInputStream(), Charset.defaultCharset());
 
-			//Success
-			if(idm != null && idm.length() > 0){
-				log.info("Get Id successfully.");
-				if(idm.endsWith(System.getProperty("line.separator"))){
-					idm = idm.replace(System.getProperty("line.separator"), "");
-				}
-				return new CardReadModel(idm);
-			//Error
-			} else {
-				// Read std error
-				String errorMessage = IOUtils.toString(process.getErrorStream(), Charset.defaultCharset());
-				log.error("Error Stream: ", errorMessage);
-				throw new CardReadException("Card read error");
-			}
-		} catch (InterruptedException e2) {
-			throw new CardReadException(e2.getMessage());
-		}
-	}
+            //Success
+            if (idm != null && idm.length() > 0) {
+                log.info("Get Id successfully.");
+                if (idm.endsWith(System.getProperty("line.separator"))) {
+                    idm = idm.replace(System.getProperty("line.separator"), "");
+                }
+                return new CardReadModel(idm);
+                //Error
+            } else {
+                // Read std error
+                String errorMessage = IOUtils.toString(process.getErrorStream(), Charset.defaultCharset());
+                log.error("Error Stream: ", errorMessage);
+                throw new CardReadException("Card read error");
+            }
+        } catch (InterruptedException e2) {
+            throw new CardReadException(e2.getMessage());
+        }
+    }
 }

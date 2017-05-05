@@ -16,12 +16,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthResult {
-	@ApiModelProperty("User name")
-	private String userName;
+    @ApiModelProperty("User name")
+    private String userName;
 
-	@ApiModelProperty("Permission list")
-	private List<String> permissionList;
+    @ApiModelProperty("Permission list")
+    private List<String> permissionList;
 
-	@ApiModelProperty("Role list")
-	private List<String> roleList;
+    @ApiModelProperty("Role list")
+    private List<String> roleList;
 }
