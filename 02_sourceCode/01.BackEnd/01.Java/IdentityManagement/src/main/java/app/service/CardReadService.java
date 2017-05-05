@@ -19,6 +19,13 @@ public class CardReadService {
     private static final String FILE_PYTHON_CARD_READ = "/opt/get-card-id.py";
     private static final int MILLISECOUND_WAIT_CMD = 3000;
 
+    /**
+     * Get IDm of Samart card.
+     *
+     * @return CardReadModel
+     * @throws CardReadException Card read failure
+     * @throws IOException IOException
+     */
     public CardReadModel getIdm() throws CardReadException, IOException {
         try {
             // Register Python command

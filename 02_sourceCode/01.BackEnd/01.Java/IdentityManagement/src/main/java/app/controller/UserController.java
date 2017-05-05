@@ -35,6 +35,13 @@ public class UserController {
     @Autowired
     private AuthrizationService authrization;
 
+    /**
+     * Select all user.
+     *
+     * @param String token
+     * @param HttpServletRequest request for authrization.
+     * @return ResponseEntity
+     */
     @ApiOperation(value = "Get users infomation", notes = "Get users infomation. "
             + "<br>This endpoint is allowed to call by Admin.")
     @RequestMapping(value = "/users", method = RequestMethod.GET)

@@ -11,6 +11,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import app.entity.User;
 import lombok.Data;
 
+/**
+ * LoginUserDetail.
+ *
+ * @author Kenji Nagai
+ *
+ */
 @Data
 public class LoginUserDetail extends org.springframework.security.core.userdetails.User {
     private static final long serialVersionUID = 5L;
@@ -20,6 +26,11 @@ public class LoginUserDetail extends org.springframework.security.core.userdetai
     private List<String> permissionList;
     private Collection<GrantedAuthority> authorities;
 
+    /**
+     * Constructor.
+     *
+     * @param User user
+     */
     public LoginUserDetail(User user) {
         super(user.getName(), user.getEncodedPassword(), new ArrayList<GrantedAuthority>());
         name = user.getName();
