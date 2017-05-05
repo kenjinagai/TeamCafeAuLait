@@ -5,6 +5,20 @@
 <title>Hello</title>
 </head>
 <body>
-Hello this is Identity Management.
+<h1>Identity Management</h1>
+<ul>
+	<li><a href="" id="swagger-json">Swagger Json</a></li>
+	<li><a href="" id="swagger-ui">Swagger UI</a></li>
+</ul>
+    <script type="text/javascript">
+      var protocol = window.location.protocol;
+      var hostname = window.location.hostname;
+      var serviceName = "/IdentityManagement";
+      var swaggerJsonEndPoint = "/v2/api-docs";
+      var swaggerEndPoint = "/swagger-ui.html";
+
+      document.getElementById("swagger-json").setAttribute('href', protocol + serviceName + swaggerJsonEndPoint);
+      document.getElementById("swagger-ui").setAttribute('href', protocol + serviceName + swaggerEndPoint);
+    </script>
 </body>
 </html>
