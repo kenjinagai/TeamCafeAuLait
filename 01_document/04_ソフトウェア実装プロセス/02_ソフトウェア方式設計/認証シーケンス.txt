@@ -1,0 +1,80 @@
+@startuml
+title 認証シーケンス
+' Participants
+actor User as user
+
+box "フロントエンド\nアプリケーション" #ACB9CA
+    participant "HTML" as html
+    participant "JavaScript" as js
+end box
+
+box "バックエンド\nアプリケーション" #B4C6E7
+    participant "TicketManagement" as ticket
+    participant "IdentityManagement" as idm
+end box
+
+box "データベース" #FFE699
+    participant "MySQL" as db
+end box
+
+'Sequence
+== ログイン ==
+user -> html : ユーザー名入力
+user -> html : パスワード入力
+user -> html : ログインボタン押下
+html -> js :ユーザー名/パスワード
+js -> js : ユーザー名/パスワード\nバリデーション
+opt バリデーション失敗
+    js --> html : エラーメッセージ
+    html -> html : エラーメッセージ表示
+    html --> user : ログイン失敗
+end
+js -> idm : ログイン処理要求\n(ユーザー名/パスワード)
+idm -> db : ユーザー情報取得問合せ
+db --> idm : ユーザー情報
+idm -> idm : 認証
+idm --> js : ログイン処理応答
+
+opt 失敗応答
+  js --> html : エラーメッセージ
+  html -> html : エラーメッセージ表示
+  html --> user : ログイン失敗
+end
+
+  js -> js : 認証トークン/ユーザー情報保持
+  js --> html :ユーザー情報
+  html -> html : 共通画面遷移
+  html --> user : 共通画面表示
+
+== 認証トークン生存確認 ==
+user -> html : チケット残数確認
+html -> js :
+js -> ticket : チケット枚数取得要求\n(認証トークン)
+ticket -> idm : 認証トークン生存確認要求
+idm -> idm : 認証トークン生存確認
+idm --> ticket : 認証トークン生存確認応答
+
+opt 失敗応答
+    ticket --> js : 失敗
+    js --> html : エラーメッセージ
+    html -> html : エラーメッセージ表示
+    html --> user :チケット残数確認失敗
+end
+note over ticket : 成功時、処理を続行する
+
+== ログアウト ==
+user -> html : ログアウトボタン押下
+html -> js :
+js -> idm : ログアウト要求\n(認証トークン)
+
+alt 認証トークン有効
+    idm -> idm : トークン破棄
+    idm --> js : ログアウト成功応答
+else 認証トークン無効
+    idm --> js : トークン無効応答\n(HTTP status code:204)
+end
+js -> js : 認証トークン破棄
+js -> html :
+html -> html : 認証画面遷移?
+html --> user : 認証画面表示
+@enduml
