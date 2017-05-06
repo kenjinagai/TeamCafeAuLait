@@ -1,5 +1,0 @@
-import sys;
-sys.path.append('/opt/nfcpy')
-from examples import getIdmClass
-idm = getIdmClass.MyCardReader()
-num = idm.return_id()
