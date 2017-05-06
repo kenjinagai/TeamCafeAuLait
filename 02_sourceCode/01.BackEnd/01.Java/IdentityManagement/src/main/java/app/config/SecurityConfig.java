@@ -39,10 +39,10 @@ import app.service.LoginUserDetailsService;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        RequestMatcher csrfRequestMatcher = new RequestMatcher() {
+    protected void configure(final HttpSecurity http) throws Exception {
+        final RequestMatcher csrfRequestMatcher = new RequestMatcher() {
             // CSRF対象外URL:
-            private AntPathRequestMatcher[] requestMatchers = {
+            private final AntPathRequestMatcher[] requestMatchers = {
                     new AntPathRequestMatcher("/index.html"),
                     new AntPathRequestMatcher("/login"), new AntPathRequestMatcher("/login/card"),
                     new AntPathRequestMatcher("/v2/api-docs"),
@@ -54,8 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     new AntPathRequestMatcher("/swagger-resources/configuration/**") };
 
             @Override
-            public boolean matches(HttpServletRequest request) {
-                for (AntPathRequestMatcher rm : requestMatchers) {
+            public boolean matches(final HttpServletRequest request) {
+                for (final AntPathRequestMatcher rm : requestMatchers) {
                     if (rm.matches(request)) {
                         return false;
                     }
@@ -90,7 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // セッションヘッダーにCSRFトークンを設定
     private CsrfTokenRepository csrfTokenRepository() {
-        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        final HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
         repository.setHeaderName("X-XSRF-TOKEN");
         return repository;
     }
@@ -98,14 +98,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private Filter csrfHeaderFilter() {
         return new OncePerRequestFilter() {
             @Override
-            protected void doFilterInternal(HttpServletRequest request,
-                    HttpServletResponse response,
-                    FilterChain filterChain) throws ServletException, IOException {
-                CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+            protected void doFilterInternal(final HttpServletRequest request,
+                    final HttpServletResponse response,
+                    final FilterChain filterChain) throws ServletException, IOException {
+                final CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
                 if (csrf != null) {
                     Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
-                    String token = csrf.getToken();
-                    if (cookie == null || token != null && !token.equals(cookie.getValue())) {
+                    final String token = csrf.getToken();
+                    if ((cookie == null) || ((token != null) && !token.equals(cookie.getValue()))) {
                         cookie = new Cookie("XSRF-TOKEN", token);
                         cookie.setPath("/");
                         response.addCookie(cookie);
@@ -132,7 +132,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         }
 
         // 認証処理設定
-        public void init(AuthenticationManagerBuilder auth) throws Exception {
+        @Override
+        public void init(final AuthenticationManagerBuilder auth) throws Exception {
             auth
                     // 認証ユーザ取得サービスを指定
                     .userDetailsService(userDetailService)
@@ -140,5 +141,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .passwordEncoder(passwordEncoder());
         }
     }
-
 }
