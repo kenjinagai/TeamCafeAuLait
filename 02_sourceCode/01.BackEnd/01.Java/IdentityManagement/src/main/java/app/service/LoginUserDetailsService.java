@@ -13,6 +13,8 @@ import app.repository.UserRepository;
 /**
  * 認証ユーザ取得サービスクラス.
  *
+ * @author Kenji Nagai.
+ *
  */
 @Service
 public class LoginUserDetailsService implements UserDetailsService {
@@ -20,9 +22,9 @@ public class LoginUserDetailsService implements UserDetailsService {
     UserRepository repository;
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String userName) throws UsernameNotFoundException {
         //DBに登録されているメールアドレスから認証対象ユーザを取得
-        User user = repository.findOne(userName);
+        final User user = repository.findOne(userName);
         if (user == null) {
             //TODO:このexceptionをそのままcatchしたい
             throw new UsernameNotFoundException("対象データがありません");
