@@ -22,9 +22,9 @@ import app.service.LoginUserDetailsService;
 /**
  * Authentication setting class.
  *
+ * @author Kenji Nagai.
  */
 @Configuration
-// @EnableWebMvcSecurity
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -73,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated() // 上記にマッチしなければ未認証の場合エラー
                 .and()
                 // ログアウト実行apiを指定
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/logout")).and()
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).and()
                 .csrf()
                 .requireCsrfProtectionMatcher(csrfRequestMatcher)
                 .csrfTokenRepository(this.csrfTokenRepository());
