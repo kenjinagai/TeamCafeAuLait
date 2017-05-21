@@ -1,0 +1,21 @@
+@startuml
+title Title(XXX作成)
+' Participants
+actor User as user
+
+box "フロントエンド\nアプリケーション" #ACB9CA
+    participant "HTML" as html
+    participant "JavaScript" as js
+end box
+
+box "バックエンド\nアプリケーション" #B4C6E7
+    participant "IdentityManagement" as idm
+end box
+
+box "データベース" #FFE699
+    participant "MySQL" as db
+end box
+
+'Sequence
+== XXX ==
+@enduml
