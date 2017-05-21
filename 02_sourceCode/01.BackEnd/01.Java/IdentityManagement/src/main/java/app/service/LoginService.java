@@ -2,14 +2,21 @@ package app.service;
 
 import java.util.stream.Collectors;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
+import app.constant.TicketConstants;
 import app.model.AuthResult;
 import app.model.LoginInfo;
 import app.model.LoginUserDetail;
@@ -18,7 +25,7 @@ import app.model.LoginUserDetail;
  * Login Service.
  * This is implemented with Spring Security.
  *
- * @author Kenji Nagai
+ * @author Kenji Nagai.
  *
  */
 @Service
@@ -49,5 +56,34 @@ public class LoginService {
                 principal.getAuthorities()
                         .stream().map(authority -> authority.getAuthority())
                         .collect(Collectors.toList()));
+    }
+
+    /**
+     * Set CSRF Cookie.
+     *
+     * @param authResult Loggined user info.
+     * @param request Request using for check CSRF cookie.
+     * @param response Set a CSRF Cookie.
+     */
+    public void setCsrfCookie(final AuthResult authResult, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        if ((authResult != null) && (authResult.getUserName() != null)) {
+            final CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+            // If there isn't a CSRF token in request, set a CRSR token.
+            if (csrf != null) {
+                Cookie cookie = WebUtils.getCookie(request, TicketConstants.COOKIE_NAME_CSRF);
+                final String token = csrf.getToken();
+                // Get loggined user info.
+                final Authentication authentication = SecurityContextHolder.getContext()
+                        .getAuthentication();
+                // If Cookie could be writted, do it.
+                if (((cookie == null) || ((token != null) && !token.equals(cookie.getValue())))
+                        && ((authentication != null) && authentication.isAuthenticated())) {
+                    cookie = new Cookie(TicketConstants.COOKIE_NAME_CSRF, token);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                }
+            }
+        }
     }
 }
