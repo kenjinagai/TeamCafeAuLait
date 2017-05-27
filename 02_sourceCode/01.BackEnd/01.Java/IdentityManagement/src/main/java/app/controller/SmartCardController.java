@@ -28,7 +28,7 @@ public class SmartCardController {
     @RequestMapping(value = "/card/id", method = RequestMethod.GET)
     public ResponseEntity<CardReadModel> getCardId() {
         try {
-            final CardReadModel resModel = cardReadService.getIdm();
+            final CardReadModel resModel = cardReadService.getCardInfo();
             return new ResponseEntity<CardReadModel>(resModel, HttpStatus.OK);
         } catch (CardReadException | IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
