@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import app.constant.Constants;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -14,6 +15,7 @@ import lombok.ToString;
  *
  */
 @Setter
+@Getter
 @ToString
 public class LoginInfo {
     @ApiModelProperty("User id")
