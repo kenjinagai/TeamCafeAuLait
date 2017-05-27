@@ -11,7 +11,7 @@ import app.model.LoginUserDetail;
 import app.repository.UserRepository;
 
 /**
- * 認証ユーザ取得サービスクラス.
+ * Get loggined user information.
  *
  * @author Kenji Nagai.
  *

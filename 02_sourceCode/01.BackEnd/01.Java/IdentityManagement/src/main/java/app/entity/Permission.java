@@ -11,6 +11,11 @@ import javax.persistence.Table;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+/**
+ * User permission class.
+ *
+ * @author Kenji Nagai
+ */
 @Data
 @Entity
 @Table(name = "permission")

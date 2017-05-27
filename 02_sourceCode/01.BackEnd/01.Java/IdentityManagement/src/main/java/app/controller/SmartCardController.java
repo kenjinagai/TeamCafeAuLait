@@ -13,6 +13,12 @@ import app.exception.CardReadException;
 import app.model.CardReadModel;
 import app.service.CardReadService;
 
+/**
+ * SmartCardController
+ *
+ * @author Kenji Nagai
+ *
+ */
 @RestController
 public class SmartCardController {
 

@@ -1,13 +1,18 @@
 package app.model;
 
 
-import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import app.constant.Constants;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+/**
+ * Login Info.
+ *
+ * @author Kenji Nagai
+ *
+ */
 @Data
 public class LoginInfo {
     @ApiModelProperty("User id")

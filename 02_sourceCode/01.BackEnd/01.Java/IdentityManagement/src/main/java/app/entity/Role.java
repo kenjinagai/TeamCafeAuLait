@@ -16,6 +16,12 @@ import javax.persistence.Table;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+/**
+ * User role class.
+ *
+ * @author Kenji Nagai
+ *
+ */
 @Data
 @Entity
 @Table(name = "role")

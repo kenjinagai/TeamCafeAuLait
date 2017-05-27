@@ -22,8 +22,9 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * Get user data.
- * Only admin user can used.
+ * UserController
+ *
+ * @author Kenji Nagai.
  *
  */
 @RestController
@@ -37,10 +38,12 @@ public class UserController {
 
     /**
      * Select all user.
+     * Only admin user can used.
      *
      * @param String token
      * @param HttpServletRequest request for authrization.
      * @return ResponseEntity
+     * @author Kenji Nagai.
      */
     @ApiOperation(value = "Get users infomation", notes = "Get users infomation. "
             + "<br>This endpoint is allowed to call by Admin.")
@@ -49,8 +52,8 @@ public class UserController {
     @ApiResponses(value = { @ApiResponse(code = 403, message = "Invalid X-XSRF-TOKEN."),
             @ApiResponse(code = 500, message = "Internal Server Error") })
     public ResponseEntity<List<User>> findAll(
-            @ApiParam(value = "Authentication token for XSRF.", required = true) @RequestHeader(value = "X-XSRF-TOKEN") String token,
-            HttpServletRequest request) {
+            @ApiParam(value = "Authentication token for XSRF.", required = true) @RequestHeader(value = "X-XSRF-TOKEN") final String token,
+            final HttpServletRequest request) {
         if (!authrization.isAdmin(request)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

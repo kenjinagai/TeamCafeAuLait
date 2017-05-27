@@ -17,6 +17,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+/**
+ * User authetication and role.
+ *
+ * @author Kenji Nagai
+ *
+ */
 @Data
 @Entity
 @Table(name = "user")

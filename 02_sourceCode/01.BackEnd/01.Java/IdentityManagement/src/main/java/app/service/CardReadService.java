@@ -12,6 +12,12 @@ import org.springframework.stereotype.Service;
 import app.exception.CardReadException;
 import app.model.CardReadModel;
 
+/**
+ * Smart card service.
+ *
+ * @author Kenji Nagai
+ *
+ */
 @Service
 public class CardReadService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CardReadService.class);

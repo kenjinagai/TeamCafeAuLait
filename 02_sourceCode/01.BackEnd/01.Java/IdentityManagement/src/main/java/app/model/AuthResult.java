@@ -8,7 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 認証結果を返すモデルクラス.
+ * Auth Result.
+ *
  * @author Kenji Nagai
  *
  */
