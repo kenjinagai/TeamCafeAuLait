@@ -7,6 +7,14 @@ package java.io {
     interface Serializable
 }
 
+package java.lang {
+    class Exception
+}
+
+package org.springframework.boot.web.support {
+    class SpringBootServletInitializer
+}
+
 package org.springframework.security.core.userdetails {
     class User
 }
@@ -35,6 +43,12 @@ package org.springframework.security.config.annotation.authentication.configurer
     class GlobalAuthenticationConfigurerAdapter
 }
 
+package org.springframework.security.core.userdetails {
+    interface UserDetailsService {
+    
+    }
+}
+
 ' Identity management Class / Interface
 
 package app {
@@ -43,7 +57,21 @@ package app {
     }
 }
 
+package app.aspect {
+    class AspectLogger {
+        - {static} Logger LOGGER
+        - {static} String TARGET_CLASS
+        + void logStart(final JoinPoint joinPoint) 
+        + void logEnd(final JoinPoint joinPoint)
+        - void logMethod(final String executeName, final JoinPoint joinPoint)
+    }
+}
+
 package app.config {
+    class AspectConfiguration {
+        
+    }
+    
     class SecurityConfig {
         # void configure(HttpSecurity http)
         - CsrfTokenRepository csrfTokenRepository()
@@ -55,47 +83,32 @@ package app.config {
         ~ PasswordEncoder passwordEncoder()
         - void init(AuthenticationManagerBuilder auth)
     }
+    
+    class SwaggerConfig {
+        + Docket api()
+    }
+}
+
+package app.constant {
+    class Constants {
+    }
 }
 
 package app.controller {
-    class LoginRestController {
-        -LoginService loginService
-        @RequestMapping(value="/api/login",method=RequestMethod.POST)
-        +ResponseEntity<AuthResult> login(LoginInfoDTO, HttpServletRequest, HttpServletResponse)
+    class LoginController {
+        -AuthenticationService authService
+        +{static} Logger LOGGER
+        @RequestMapping(value="",method=RequestMethod.POST)
+        +ResponseEntity<AuthResult> login(LoginInfo loginInfo, final HttpServletRequest request, final HttpServletResponse response)
+        @RequestMapping(value = "card", method = RequestMethod.POST)
+        +ResponseEntity<AuthResult> loginSmartCard(HttpServletRequest request, HttpServletResponse response)
     }
 
-    class UserRestClient {
-        -UserRepository repository
-        @RequestMapping(value="/api/v1/users",method=RequestMethod.GET)
+    class UserController {
+        - UserRepository repository
+        - AuthenticationService authService
+        @RequestMapping(value="/users",method=RequestMethod.GET)
         +List<User> findAll()
-    }
-}
-
-package app.model {
-    class LoginUserDetails{
-        -String name
-      	-String password
-      	-List<String> permissions
-      	-Collection<GrantedAuthority> authorities
-        +getter()
-        +setter()
-        +constructor()
-    }
-
-    class AuthResult {
-        -String userName
-        -List<String> permissionList
-        -List<String> rollList
-        +getter()
-        +setter()
-        +constructor()
-    }
-
-    class LoginInfoDTO {
-        -String mailaddress
-        -String password
-        +getter()
-        +setter()
     }
 }
 
@@ -118,12 +131,57 @@ package app.entity {
     }
 
     class User {
-    -String mailaddress
-    -String encodedPassword
-    -String name
-    -List<Role> roles
-
+        -String userId
+        -String encodedPassword
+        -String name
+        -List<Role> roleList
     }
+}
+
+package app.exception {
+    class CardReadException {
+        + constructor(String)
+    }
+}
+
+package app.model {
+    class AuthResult {
+        -String userName
+        -List<String> permissionList
+        -List<String> rollList
+        +getter()
+        +setter()
+        +constructor()
+    }
+    
+    class CardReadModel {
+        -id
+        +getter()
+        +setter()
+    }
+    
+    class LoginInfo {
+        -String userId
+        -String password
+        +Boolean validParam()
+        - Boolean validBlank()
+        - Boolean validTextLength()
+        - Boolean validNumOrAlpha()
+        +getter()
+        +setter()
+    }
+
+    class LoginUserDetail{
+        -String name
+        -String password
+        -List<String> permissionsList
+        -Collection<GrantedAuthority> authorities
+        +getter()
+        +setter()
+        +constructor(User)
+    }
+
+
 }
 
 package app.repository {
@@ -134,32 +192,59 @@ package app.repository {
 
 
 package app.service {
-    class LoginUserDetailsService {
 
-    }
-
-    class LoginService {
+    class AuthenticationService {
         -AuthenticationManager authMgr
         -{static}Logger logger
         +AuthResult login()
+        -void setCsrfCookie(AuthResult authResult, HttpServletRequest request, HttpServletResponse response)
+        +boolean isAdmin(HttpServletRequest)
     }
+    
+    class CardReadService {
+        +{static}Logger LOGGER
+        +CardReadModel getCardInfo()
+        -Process callPythonScript() 
+        -Boolean isIdm(final String stdOut)
+        -String parseIdm(final String stdOut)
+        
+    }
+    
+    class LoginUserDetailsService {
+        UserRepository repository
+        +UserDetails loadUserByUsername(String userName)
+
+    }
+
 }
-' Relation
-LoginService -down-o LoginRestController
-UserRepository -down-o UserRestClient
+' Inhelitation/Implemention
 SecurityConfig -up-|> WebSecurityConfigurerAdapter
 AuthenticationConfiguration -up-* SecurityConfig
 AuthenticationConfiguration -up-|> GlobalAuthenticationConfigurerAdapter
-LoginRestController -- AuthResult
-AuthResult -- LoginService
-LoginInfoDTO -- LoginService
-LoginUserDetails -- LoginService
-LoginUserDetails -- LoginUserDetailsService
 Serializable <|-- Permission
 Serializable <|-- Role
-Role -- User
 Serializable <|-- User
-User -- LoginUserDetails
+User -- LoginUserDetail
 JpaRepository <|-- UserRepository
-User <|-- LoginUserDetails
+User <|-- LoginUserDetail
+SpringBootServletInitializer <|-- Application
+UserDetailsService <|-- LoginUserDetailsService
+
+' Relation
+AuthResult -- AuthenticationService
+CardReadModel -- CardReadService
+LoginInfo -- AuthenticationService
+LoginUserDetail -- AuthenticationService
+LoginUserDetail -- LoginUserDetailsService
+Role -- User
+
+' Implemention
+AuthenticationService --o UserController
+AuthenticationService --o LoginController
+LoginUserDetailsService --o AuthenticationConfiguration
+UserRepository --o LoginUserDetailsService
+
+'Exception
+Exception <|-- CardReadException
+CardReadService -- CardReadException
 @enduml
