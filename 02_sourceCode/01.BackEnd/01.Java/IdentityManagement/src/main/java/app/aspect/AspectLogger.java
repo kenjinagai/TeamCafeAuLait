@@ -2,6 +2,7 @@ package app.aspect;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
@@ -30,8 +31,20 @@ public class AspectLogger {
         logMethod("End:", joinPoint);
     }
 
+    @AfterThrowing(pointcut = TARGET_CLASS, throwing = "ex")
+    public void logThrowing(final Exception ex) {
+        logException(ex);
+    }
+
     private void logMethod(final String executeName, final JoinPoint joinPoint) {
         LOGGER.info(executeName + joinPoint.getTarget().getClass().getName() + "." +
                 joinPoint.getSignature().getName());
+    }
+
+    private void logException(final Exception ex) {
+        LOGGER.error("Exception occured: " + ex.getClass().getName());
+        if (ex.getMessage() != null) {
+            LOGGER.error("Exception message: " + ex.getMessage());
+        }
     }
 }
