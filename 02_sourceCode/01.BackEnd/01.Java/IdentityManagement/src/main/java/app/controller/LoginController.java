@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiResponses;
 public class LoginController {
 
     @Autowired
-    private AuthenticationService loginService;
+    private AuthenticationService authService;
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
     /**
@@ -61,9 +61,9 @@ public class LoginController {
         } else {
             AuthResult authResult = null;
             try {
-                authResult = loginService.login(loginInfo);
+                authResult = authService.login(loginInfo);
                 // If authentication success, set CSRF in cookie.
-                loginService.setCsrfCookie(authResult, request, response);
+                authService.setCsrfCookie(authResult, request, response);
                 res = new ResponseEntity<AuthResult>(authResult, null, HttpStatus.CREATED);
             } catch (final AuthenticationException e) {
                 // If authentication failed, return unauthrized.

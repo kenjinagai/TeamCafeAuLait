@@ -34,7 +34,7 @@ public class UserController {
     private UserRepository repository;
 
     @Autowired
-    private AuthenticationService auth;
+    private AuthenticationService authService;
 
     /**
      * Select all user.
@@ -54,7 +54,7 @@ public class UserController {
     public ResponseEntity<List<User>> findAll(
             @ApiParam(value = "Authentication token for XSRF.", required = true) @RequestHeader(value = "X-XSRF-TOKEN") final String token,
             final HttpServletRequest request) {
-        if (!auth.isAdmin(request)) {
+        if (!authService.isAdmin(request)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<List<User>>(repository.findAll(), HttpStatus.OK);
