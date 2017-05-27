@@ -1,11 +1,11 @@
 package app.model;
 
-
 import org.apache.commons.lang3.StringUtils;
 
 import app.constant.Constants;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Login Info.
@@ -13,7 +13,8 @@ import lombok.Data;
  * @author Kenji Nagai
  *
  */
-@Data
+@Setter
+@ToString
 public class LoginInfo {
     @ApiModelProperty("User id")
     private String userId;
@@ -21,7 +22,7 @@ public class LoginInfo {
     @ApiModelProperty("User password")
     private String password;
 
-    public Boolean validParam(){
+    public Boolean validParam() {
         return validBlank() && validTextLength() && validNumOrAlpha();
     }
 
@@ -40,8 +41,10 @@ public class LoginInfo {
      * @return Boolean Whether this class string fields counts under max text length.
      */
     private Boolean validTextLength() {
-            return (StringUtils.length(userId) < Constants.MAX_TEXT_LENGHT || StringUtils.length(userId) == Constants.MAX_TEXT_LENGHT)
-                    && (StringUtils.length(password) < Constants.MAX_TEXT_LENGHT || StringUtils.length(password) == Constants.MAX_TEXT_LENGHT);
+        return ((StringUtils.length(userId) < Constants.MAX_TEXT_LENGHT)
+                || (StringUtils.length(userId) == Constants.MAX_TEXT_LENGHT))
+                && ((StringUtils.length(password) < Constants.MAX_TEXT_LENGHT)
+                        || (StringUtils.length(password) == Constants.MAX_TEXT_LENGHT));
     }
 
     /**
@@ -50,11 +53,7 @@ public class LoginInfo {
      * @return Boolean Whether this class string fields aren't alphabet or number.
      */
     private Boolean validNumOrAlpha() {
-        if(userId != null && password != null) {
-            String alphanumericPattern = "^[a-zA-Z0-9]*$";
-            return userId.matches(alphanumericPattern) && password.matches(alphanumericPattern);
-        } else {
-            return false;
-        }
+        final String alphanumericPattern = "^[a-zA-Z0-9]*$";
+        return userId.matches(alphanumericPattern) && password.matches(alphanumericPattern);
     }
 }

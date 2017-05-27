@@ -61,4 +61,21 @@ public class LoginInfoTest {
         defTestModel.setPassword(JAPANESE_TEXT);
         assertThat(defTestModel.validParam(), is(false));
     }
+
+    @Test
+    public void userIdがnullの場合falseが返される() {
+        defTestModel.setUserId(null);
+        assertThat(defTestModel.validParam(), is(false));
+    }
+
+    @Test
+    public void passwordがnullの場合falseが返される() {
+        defTestModel.setPassword(null);
+        assertThat(defTestModel.validParam(), is(false));
+    }
+
+    @Test
+    public void toString試験() {
+        defTestModel.toString();
+    }
 }
