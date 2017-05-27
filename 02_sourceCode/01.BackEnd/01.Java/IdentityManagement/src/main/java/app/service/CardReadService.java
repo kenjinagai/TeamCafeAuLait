@@ -67,7 +67,11 @@ public class CardReadService {
                 Constants.FILE_PYTHON_CARD_READ);
 
         final Process process = processBuilder.start();
-        process.waitFor(Constants.MILLISECOUND_WAIT_CMD, TimeUnit.MILLISECONDS);
+        final boolean isFinished = process.waitFor(Constants.MILLISECOUND_WAIT_CMD,
+                TimeUnit.MILLISECONDS);
+        if (!isFinished) {
+            process.destroy();
+        }
         return process;
     }
 
