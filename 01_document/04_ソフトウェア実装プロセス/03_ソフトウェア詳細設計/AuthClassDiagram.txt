@@ -16,7 +16,7 @@ package org.springframework.boot.web.support {
 }
 
 package org.springframework.security.core.userdetails {
-    class User
+    class "User" as springUser
 }
 
 package org.springframework.data.jpa.repository {
@@ -135,6 +135,8 @@ package app.entity {
         -String encodedPassword
         -String name
         -List<Role> roleList
+        +getter()
+        +setter()
     }
 }
 
@@ -226,7 +228,7 @@ Serializable <|-- Role
 Serializable <|-- User
 User -- LoginUserDetail
 JpaRepository <|-- UserRepository
-User <|-- LoginUserDetail
+springUser <|-- LoginUserDetail
 SpringBootServletInitializer <|-- Application
 UserDetailsService <|-- LoginUserDetailsService
 
