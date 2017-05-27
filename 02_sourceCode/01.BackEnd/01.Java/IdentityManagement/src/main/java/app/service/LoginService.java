@@ -16,7 +16,7 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
 
-import app.constant.TicketConstants;
+import app.constant.Constants;
 import app.model.AuthResult;
 import app.model.LoginInfo;
 import app.model.LoginUserDetail;
@@ -71,7 +71,7 @@ public class LoginService {
             final CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
             // If there isn't a CSRF token in request, set a CRSR token.
             if (csrf != null) {
-                Cookie cookie = WebUtils.getCookie(request, TicketConstants.COOKIE_NAME_CSRF);
+                Cookie cookie = WebUtils.getCookie(request, Constants.COOKIE_NAME_CSRF);
                 final String token = csrf.getToken();
                 // Get loggined user info.
                 final Authentication authentication = SecurityContextHolder.getContext()
@@ -79,7 +79,7 @@ public class LoginService {
                 // If Cookie could be writted, do it.
                 if (((cookie == null) || ((token != null) && !token.equals(cookie.getValue())))
                         && ((authentication != null) && authentication.isAuthenticated())) {
-                    cookie = new Cookie(TicketConstants.COOKIE_NAME_CSRF, token);
+                    cookie = new Cookie(Constants.COOKIE_NAME_CSRF, token);
                     cookie.setPath("/");
                     response.addCookie(cookie);
                 }

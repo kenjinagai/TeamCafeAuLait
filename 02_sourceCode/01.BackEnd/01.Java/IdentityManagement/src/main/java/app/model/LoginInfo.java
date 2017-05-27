@@ -4,7 +4,7 @@ package app.model;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import app.constant.TicketConstants;
+import app.constant.Constants;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -35,8 +35,8 @@ public class LoginInfo {
      * @return Boolean Whether this class string fields counts under max text length.
      */
     private Boolean validTextLength() {
-            return (StringUtils.length(userId) < TicketConstants.MAX_TEXT_LENGHT || StringUtils.length(userId) == TicketConstants.MAX_TEXT_LENGHT)
-                    && (StringUtils.length(password) < TicketConstants.MAX_TEXT_LENGHT || StringUtils.length(password) == TicketConstants.MAX_TEXT_LENGHT);
+            return (StringUtils.length(userId) < Constants.MAX_TEXT_LENGHT || StringUtils.length(userId) == Constants.MAX_TEXT_LENGHT)
+                    && (StringUtils.length(password) < Constants.MAX_TEXT_LENGHT || StringUtils.length(password) == Constants.MAX_TEXT_LENGHT);
     }
 
     /**
