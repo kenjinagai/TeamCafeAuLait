@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.model.AuthResult;
 import app.model.LoginInfo;
-import app.service.LoginService;
+import app.service.AuthenticationService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiResponses;
 public class LoginController {
 
     @Autowired
-    private LoginService loginService;
+    private AuthenticationService loginService;
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
     /**

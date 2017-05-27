@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.entity.User;
 import app.repository.UserRepository;
-import app.service.AuthrizationService;
+import app.service.AuthenticationService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -34,7 +34,7 @@ public class UserController {
     private UserRepository repository;
 
     @Autowired
-    private AuthrizationService authrization;
+    private AuthenticationService auth;
 
     /**
      * Select all user.
@@ -54,7 +54,7 @@ public class UserController {
     public ResponseEntity<List<User>> findAll(
             @ApiParam(value = "Authentication token for XSRF.", required = true) @RequestHeader(value = "X-XSRF-TOKEN") final String token,
             final HttpServletRequest request) {
-        if (!authrization.isAdmin(request)) {
+        if (!auth.isAdmin(request)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<List<User>>(repository.findAll(), HttpStatus.OK);

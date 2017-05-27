@@ -29,7 +29,7 @@ import app.model.LoginUserDetail;
  *
  */
 @Service
-public class LoginService {
+public class AuthenticationService {
 
     @Autowired
     private AuthenticationManager authMgr;
@@ -86,4 +86,15 @@ public class LoginService {
             }
         }
     }
+
+    /**
+     * Whether user is admin.
+     *
+     * @param request
+     * @return Whether user is admin.
+     */
+    public boolean isAdmin(final HttpServletRequest request) {
+        return request.isUserInRole(Constants.ROLE_ADMIN);
+    }
+
 }
