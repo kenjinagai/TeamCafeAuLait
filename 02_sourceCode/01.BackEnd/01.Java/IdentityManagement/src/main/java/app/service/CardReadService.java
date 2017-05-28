@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,13 @@ import app.model.CardReadModel;
 @Service
 public class CardReadService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CardReadService.class);
+    private ProcessBuilder processBuilder;
+
+    @PostConstruct
+    private void init() {
+        processBuilder = new ProcessBuilder(Constants.CMD_PYTHON,
+                Constants.FILE_PYTHON_CARD_READ);
+    }
 
     /**
      * Get Samart card infomation.
@@ -32,7 +41,7 @@ public class CardReadService {
      */
     public CardReadModel getCardInfo() throws CardReadException, IOException {
         try {
-            final Process process = callPythonScript();
+            Process process = callPythonScript();
             // Read std output
             final String stdOut = IOUtils.toString(process.getInputStream(),
                     Charset.defaultCharset());
@@ -63,10 +72,8 @@ public class CardReadService {
      */
     private Process callPythonScript() throws InterruptedException, IOException {
         // Register Python command
-        final ProcessBuilder processBuilder = new ProcessBuilder(Constants.CMD_PYTHON,
-                Constants.FILE_PYTHON_CARD_READ);
 
-        final Process process = processBuilder.start();
+        Process process = processBuilder.start();
         final boolean isFinished = process.waitFor(Constants.MILLISECOUND_WAIT_CMD,
                 TimeUnit.MILLISECONDS);
         if (!isFinished) {

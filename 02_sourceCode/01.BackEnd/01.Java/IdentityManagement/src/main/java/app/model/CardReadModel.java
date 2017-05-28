@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 public class CardReadModel {
-    private String id;
+    private final String id;
 
     public CardReadModel(final String id) {
         this.id = id;
