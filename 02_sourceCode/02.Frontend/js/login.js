@@ -1,6 +1,4 @@
-var errAuth;
 $(document).ready(function() {
-        showLoginErr(errAuth);
     $( "#signin-form" ).submit(function( event ) {
         // Valid text size
         var id = $( idInpId ).val();
@@ -27,13 +25,10 @@ $(document).ready(function() {
                 jsonp: false
         }).done( function(data) {
             alert( data );
-            errAuth = false;
-            showLoginErr(errAuth);
         }).fail(function(jqXHR, textStatus, errorThrown) {
             logError(jqXHR, textStatus, errorThrown);
             if(jqXHR.status === 401 || jqXHR.status === 400){
-                errAuth = true;
-                showLoginErr(errAuth);
+                showLoginErr(true);
             }
         });
         return event.preventDefault();

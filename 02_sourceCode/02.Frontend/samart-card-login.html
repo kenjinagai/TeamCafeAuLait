@@ -20,13 +20,7 @@
     <!-- common js -->
     <script src="js/common.js"></script>
     
-    <!-- keyboard -->
-    <link href="dist/keyboard/keyboard.css" rel="stylesheet">
-    <script src="dist/keyboard/jquery.keyboard.js" ></script>
-    <script src="js/keyboard.js"></script>
-    
     <!-- js -->
-    <script src="js/login.js"></script>
     
     <!-- Custom styles for this template -->
     <link href="css/signin.css" rel="stylesheet">
@@ -52,25 +46,16 @@
       </div>
     </nav>
     <div class="row">
-      <div class="col-sm-2"></div>
-      <form class="col-sm-8 form-signin" id="signin-form">
-        <h2 class="form-signin-heading">認証画面</h2>
-        <div class="alert alert-danger sign-in-div hidden" id="err-session-time-out">セッションタイムアウトです。</div>
-        <div class="sign-in-div">
-            <label>ID</label>
-            <input id="inp-id" class="form-control" placeholder="ID" required autofocus>
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8 form-signin" id="signin-form">
+            <h2 class="form-signin-heading">スマートカード認証画面</h2>
+            <div class="alert alert-info sign-in-div text-center center-block" role="alert">
+                <strong>カードをカードリーダー上に置き、<br>ログインボタンを押してください。</strong>
+            </div>
+            <div class="sign-in-div text-center"><img src="img/Universal_Contactless_Card_Symbol.svg" /></div>
+            <div class="sign-in-div center-block text-center"><button class="btn btn-lg btn-primary" type="button">ログイン</button></div>
         </div>
-        <div class="sign-in-div">
-            <label>パスワード</label>
-            <input type="password" id="inp-pass" class="form-control" placeholder="Password" required>
-        </div>
-        <div class="text-center"><button class="btn btn-lg btn-primary " type="submit">ログイン</button></div>
-        <div class="alert alert-info sign-in-div text-center" role="alert" id="id-link-smartcard">
-          <a href="./samart-card-login.html" class="alert-link">スマートカードを使用する</a>
-        </div>
-        <div class="alert alert-danger sign-in-div hidden text-center" id="err-auth-fail">入力されたIDまたはパスワードが異なります。</div>
-      </form>
-      <div class="col-sm-2"></div>
-    </div> <!-- /container -->
+    <div class="col-sm-2"></div>
+    </div>
   </body>
 </html>

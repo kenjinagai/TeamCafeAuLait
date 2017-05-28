@@ -1,5 +1,6 @@
 var idInpId = '#inp-id';
 var idInpPass = '#inp-pass';
+var idLinkSmart = '#id-link-smartcard';
 var idErrSessionTimeout = '#err-session-time-out';
 var idErrAuth = '#err-auth-fail';
 var maxFormSize = 15;
