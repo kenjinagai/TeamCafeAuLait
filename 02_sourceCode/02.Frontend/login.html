@@ -17,15 +17,16 @@
     <script src="dist/jquery-ui-1.12.1.custom/jquery-ui.min.js" ></script>
     <link href="dist/jquery-ui-1.12.1.custom/jquery-ui.min.css" rel="stylesheet">
     
-    <!-- keyboard css -->
+    <!-- common js -->
+    <script src="js/common.js"></script>
+    
+    <!-- keyboard -->
     <link href="dist/keyboard/keyboard.css" rel="stylesheet">
     <script src="dist/keyboard/jquery.keyboard.js" ></script>
-    <script>
-        $(function(){
-          $('#inputPassword').keyboard();
-          $('#inputEmail').keyboard();
-        });
-    </script>
+    <script src="js/keyboard.js"></script>
+    
+    <!-- js -->
+    <script src="js/login.js"></script>
     
     <!-- Custom styles for this template -->
     <link href="css/signin.css" rel="stylesheet">
@@ -52,15 +53,15 @@
     </nav>
     <div class="row">
       <div class="col-sm-2"></div>
-      <form class="col-sm-8 form-signin">
+      <form class="col-sm-8 form-signin" id="signin-form">
         <h2 class="form-signin-heading">認証画面</h2>
         <div class="sign-in-div">
             <label>ID</label>
-            <input id="inputEmail" class="form-control" placeholder="ID" required autofocus>
+            <input id="inp-id" class="form-control" placeholder="ID" required autofocus>
         </div>
         <div class="sign-in-div">
             <label>パスワード</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+            <input type="password" id="inp-pass" class="form-control" placeholder="Password" required>
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">ログイン</button>
       </form>
