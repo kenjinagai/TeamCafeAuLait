@@ -1,11 +1,6 @@
-var idInpId = '#inp-id';
-var idInpPass = '#inp-pass';
-var maxFormSize = 15;
-var RegAlphNum = /^[0-9a-zA-Z]+$/;
-var urlIdm = 'http://localhost:8080/IdentityManagement/'
-var urlLogin = urlIdm + 'login';
-
+var errAuth;
 $(document).ready(function() {
+        showLoginErr(errAuth);
     $( "#signin-form" ).submit(function( event ) {
         // Valid text size
         var id = $( idInpId ).val();
@@ -23,19 +18,25 @@ $(document).ready(function() {
         
         var json = JSON.stringify(getLoginObj(id, pass));
         $.ajax({
-              method: "POST",
-              url: urlLogin,
-              dataType: "json",
-              data: json,
-              contentType: "application/json",
-              accepts: {mycustomtype : "*/*"},
-              jsonp: false
+                method: "POST",
+                url: urlLogin,
+                dataType: "json",
+                data: json,
+                contentType: "application/json",
+                accepts: {mycustomtype : "*/*"},
+                jsonp: false
         }).done( function(data) {
             alert( data );
+            errAuth = false;
+            showLoginErr(errAuth);
         }).fail(function(jqXHR, textStatus, errorThrown) {
             logError(jqXHR, textStatus, errorThrown);
-            event.preventDefault();
+            if(jqXHR.status === 401 || jqXHR.status === 400){
+                errAuth = true;
+                showLoginErr(errAuth);
+            }
         });
+        return event.preventDefault();
     });
 });
 
@@ -43,20 +44,17 @@ function checkFormSize(formAttr){
     return formAttr.length <= maxFormSize;
 }
 
-function logError(jqXHR, textStatus, errorThrown){
-    console.error("Error Status Code: " , jqXHR.status)
-    console.error("Error Message: ", testStatus)
-    console.error("Error thrown: ", errorThrown)
-}
-
-
-function isAlpNum(str){
-    return RegAlphNum.test(str);
-}
-
 function getLoginObj(idVal, passVal){
     return {
         userId : idVal,
         password : passVal
     };
+}
+
+function showLoginErr(errFlag){
+    if(errFlag === true){
+        $( idErrAuth ).removeClass(classHide);  
+    } else{
+        $( idErrAuth ).addClass(classHide);  
+    }
 }

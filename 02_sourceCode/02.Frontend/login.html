@@ -55,6 +55,7 @@
       <div class="col-sm-2"></div>
       <form class="col-sm-8 form-signin" id="signin-form">
         <h2 class="form-signin-heading">認証画面</h2>
+        <div class="alert alert-danger sign-in-div hidden" id="err-session-time-out">セッションタイムアウトです。</div>
         <div class="sign-in-div">
             <label>ID</label>
             <input id="inp-id" class="form-control" placeholder="ID" required autofocus>
@@ -64,6 +65,7 @@
             <input type="password" id="inp-pass" class="form-control" placeholder="Password" required>
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">ログイン</button>
+        <div class="alert alert-danger sign-in-div hidden" id="err-auth-fail">入力されたIDまたはパスワードが異なります。</div>
       </form>
       <div class="col-sm-2"></div>
     </div> <!-- /container -->
