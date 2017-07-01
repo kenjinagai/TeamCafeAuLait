@@ -63,9 +63,7 @@ package app.aspect {
         - {static} String TARGET_CLASS
         + void logStart(final JoinPoint joinPoint) 
         + void logEnd(final JoinPoint joinPoint)
-        + void logThrowing(final Exception ex)
         - void logMethod(final String executeName, final JoinPoint joinPoint)
-        - void logException(final Exception ex)
     }
 }
 
