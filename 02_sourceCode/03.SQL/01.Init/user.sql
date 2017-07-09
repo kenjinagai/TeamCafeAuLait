@@ -67,6 +67,29 @@ INSERT INTO `role` VALUES (1,'管理者','ROLE_ADMIN'),(2,'一般ユーザ','ROL
 UNLOCK TABLES;
 
 --
+-- Table structure for table `role_has_permission`
+--
+
+DROP TABLE IF EXISTS `role_has_permission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `role_has_permission` (
+  `role_name` varchar(255) NOT NULL,
+  `permission_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role_has_permission`
+--
+
+LOCK TABLES `role_has_permission` WRITE;
+/*!40000 ALTER TABLE `role_has_permission` DISABLE KEYS */;
+INSERT INTO `role_has_permission` VALUES ('ROLE_ADMIN',1),('ROLE_ADMIN',2),('ROLE_ADMIN',3),('ROLE_USER',1),('ROLE_USER',2),('ROLE_GUEST',1);
+/*!40000 ALTER TABLE `role_has_permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -126,4 +149,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-06  7:30:35
+-- Dump completed on 2017-07-09  1:50:14
