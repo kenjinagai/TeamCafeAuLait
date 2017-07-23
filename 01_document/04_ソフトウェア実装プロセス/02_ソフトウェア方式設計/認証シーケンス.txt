@@ -25,29 +25,31 @@ end box
     activate idm
 idm -> idm : ユーザー名/パスワード\nバリデーション
 opt バリデーション失敗
-    idm --> js : 失敗応答
+    idm --> js : 失敗応答(401)
 end
 idm -> db : ユーザー情報取得問合せ
     activate db
 db --> idm : ユーザー情報
     deactivate db
 idm -> idm : 認証
-idm --> html : CSRF(クロスサイトリクエストフォージェリ)\n対策のトークンをブラウザのCookieに書き込む
-idm --> js : ログイン処理応答
-    deactivate idm
 
-alt 成功応答
-  js -> js : ユーザー情報保持
-  js --> html :ユーザー情報
-  html -> html : 共通画面遷移
-  html --> user : 共通画面表示
-else 失敗応答
-  js --> html : エラーメッセージ
+alt 認証成功
+    idm --> html : CSRF(クロスサイトリクエストフォージェリ)\n対策のトークンをブラウザのCookieに書き込む
+    idm --> js : ログイン処理応答(ユーザー情報, 201)
+    js -> js : ユーザー情報保持
+    js -> html :ユーザー情報
+    js -> js : 共通画面遷移
+    js --> html : 共通画面表示
+    html --> user : 共通画面表示
+else 認証失敗
+    idm --> js : ログイン処理応答(401)
+        deactivate idm
+    js --> html : エラーメッセージ
       deactivate js
-  html -> html : エラーメッセージ表示
-  html --> user : ログイン失敗
-      deactivate html
-      deactivate user
+    html -> html : エラーメッセージ表示
+    html --> user : ログイン失敗
+        deactivate html
+        deactivate user
 end
 
 
@@ -67,6 +69,7 @@ opt バリデーション失敗
     html --> user : ログイン失敗
 end
 js -> idm : ログイン処理要求\n(ユーザー名/パスワード)
+    note right : Method: POST\nEndpoint: /login
     activate idm
     deactivate html
     deactivate user
@@ -82,7 +85,7 @@ js -> js : 失敗原因確認
     activate js
 
 note right : バックエンドからの応答のBodyで判断する
-alt 読み取り時間超過
+alt ユーザーが3秒以内にスマートカードをカードリーダに載せない
     js --> html : エラーメッセージおよび再実行ボタン表示
     html -> html : 画面更新
     html --> user : エラーメッセージおよび再実行ボタン表示
@@ -91,7 +94,7 @@ alt 読み取り時間超過
         user -> html : 再実行ボタン押下
         note right : スマートカードログインと重複するので略
     end
-else スマートカード登録がされていないまたは、その他装置エラーなど
+else カード番号とユーザーが紐づいていないまたは、その他装置エラーなど
     js --> html : エラーメッセージ表示
         deactivate js
     html -> html : 画面更新
@@ -110,7 +113,8 @@ html -> html : スマートカードログイン画面遷移
 html -> user : スマートカードログイン画面\n「カードを置いてください」メッセージ
 html -> js :
     activate js
-js -> idm : スマートカードログイン
+js -> idm : スマートカードログイン要求
+    note right : Method: POST\nEndpoint: /login/card
     activate idm
 idm -> py : スマートカード番号読み取り命令
     activate py
@@ -125,13 +129,13 @@ alt ユーザーが3秒以内にスマートカードをカードリーダに載
     alt ユーザー名/パスワード取得成功
         ref over user, db : ログイン/スマートカードログイン共通シーケンス図
     else カード番号とユーザーが紐づいていない
-        idm --> js : 失敗応答
+        idm --> js : 失敗応答(401)
         ref over user, js : スマートカード読み取り失敗
     end
 else ユーザーが3秒以内にスマートカードをカードリーダに載せない
     idm -> idm : タイムアウト判定
 
-    idm --> js : 失敗応答
+    idm --> js : 失敗応答(408)
     deactivate js
     deactivate html
     deactivate user
