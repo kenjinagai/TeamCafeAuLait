@@ -1,5 +1,6 @@
 package app.service;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
@@ -97,4 +98,34 @@ public class AuthenticationService {
         return request.isUserInRole(Constants.ROLE_ADMIN);
     }
 
+    /**
+     * Get loggined user name.
+     *
+     * @param request REST API request.
+     * @return loggined user name.
+     */
+    public String getLoginnedUsername(final HttpServletRequest request) {
+        return request.getUserPrincipal().getName();
+    }
+
+    /**
+     * Get loggined user permission list.
+     * @param request REST API request.
+     * @return loggined user permission list.
+     */
+    public List<String> getLogginedUserPermissionList(final HttpServletRequest request) {
+        return this.getLogginedUser(request).getPermissionList();
+    }
+
+    /**
+     * Get loggined user info.
+     *
+     * @param request REST API request.
+     * @return loggined user info.
+     */
+    private LoginUserDetail getLogginedUser(final HttpServletRequest request) {
+        final UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) request
+                .getUserPrincipal();
+        return (LoginUserDetail) token.getPrincipal();
+    }
 }
