@@ -49,15 +49,14 @@ public class LoginController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "Login with id/passwrod", notes = "Login with user id and password. <br>Return logined user infomation")
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiResponses(value = { @ApiResponse(code = 400, message = "Body parameter validation error."),
-            @ApiResponse(code = 401, message = "Invalid user id or password."),
+    @ApiResponses(value = { @ApiResponse(code = 401, message = "Invalid user id or password."),
             @ApiResponse(code = 500, message = "Internal Server Error") })
     public ResponseEntity<AuthResult> login(@RequestBody final LoginInfo loginInfo,
             final HttpServletRequest request,
             final HttpServletResponse response) {
         ResponseEntity<AuthResult> res = null;
         if (!loginInfo.validParam()) {
-            res = new ResponseEntity<AuthResult>(HttpStatus.BAD_REQUEST);
+            res = new ResponseEntity<AuthResult>(HttpStatus.UNAUTHORIZED);
         } else {
             AuthResult authResult = null;
             try {
@@ -84,6 +83,7 @@ public class LoginController {
             + "<br>Return logined user infomation")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = { @ApiResponse(code = 401, message = "Not found smart card."),
+            @ApiResponse(code = 408, message = "時間内にスマートカードがかざされない場合"),
             @ApiResponse(code = 500, message = "Internal Server Error") })
     public ResponseEntity<AuthResult> loginSmartCard(final HttpServletRequest request,
             final HttpServletResponse response) {
