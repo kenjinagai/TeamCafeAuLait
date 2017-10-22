@@ -1,0 +1,57 @@
+@startuml
+title User ER diagram
+skinparam classAttributeIconSize 0
+
+package "MySQL" as ext <<Database>> {
+    entity user <<主,FFAA00)>> {
+        + user_id [PK]
+        ---
+        # encoded_password
+        name [FK]
+        extended_authentication [FK]
+    }
+    
+    entity extended_authentication <<T,FFAA00)>> {
+        id [PK]
+        ---
+        user_id
+        extended_authentication_value
+    }
+    
+    entity user_has_role <<T, FFAA00>> {
+        user_name [PK]
+        ---
+        role_id [FK]
+    }
+    
+    entity role_has_permission <<T, FFAA00>> {
+        role_name [PK]
+        ---
+        permission_id [FK]
+    }
+
+    entity permission <<T, FFAA00>> {
+        id [PK]
+        ---
+        alias
+        name
+    }
+    
+    entity role <<T, FFAA00>> {
+        id [PK]
+        ----
+        alias
+        name
+    }
+}
+
+user -down--- extended_authentication
+user -down-|{ user_has_role
+user_has_role }|-down- role
+role -down-|{ role_has_permission
+role_has_permission }|-down- permission
+@enduml
+
+' ref 
+' https://qiita.com/HHFactory/items/0fcdb0dd2543d46a78fd
+' https://qiita.com/kawasima/items/8dd7eda743f2fdcad78e
