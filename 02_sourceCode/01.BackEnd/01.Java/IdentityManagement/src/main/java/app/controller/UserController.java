@@ -48,8 +48,8 @@ public class UserController {
      * @return ResponseEntity
      * @author Kenji Nagai.
      */
-    @ApiOperation(value = "Get users infomation", notes = "Get users infomation. "
-            + "<br>This endpoint is allowed to call by Admin.")
+    @ApiOperation(value = "Get users infomation", notes = "# Get users infomation. \n"
+            + "* This endpoint is allowed to call by Admin.")
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = { @ApiResponse(code = 403, message = "Invalid X-XSRF-TOKEN."),
@@ -63,8 +63,16 @@ public class UserController {
         return new ResponseEntity<List<User>>(this.userService.getAllUser(), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Create user", notes = "# Create user. \n"
+            + "* This endpoint is allowed to call by Admin. \n"
+            + "* Request body example is following. \n"
+            + "``` \n"
+            + "{ \n    \"name\": \"test_user_name\",  \n    \"password\": \"test_pass\",  \n    \"roleList\": [ \n        { \n            \"id\": 1 \n        } \n    ],  \n    \"userId\": \"test_user\" \n} \n"
+            + "``` \n")
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses(value = { @ApiResponse(code = 403, message = "Invalid X-XSRF-TOKEN."),
+            @ApiResponse(code = 500, message = "Internal Server Error") })
     public void createUser(
             @ApiParam(value = "Authentication token for XSRF.", required = true) @RequestHeader(value = "X-XSRF-TOKEN") final String token,
             final HttpServletRequest request,

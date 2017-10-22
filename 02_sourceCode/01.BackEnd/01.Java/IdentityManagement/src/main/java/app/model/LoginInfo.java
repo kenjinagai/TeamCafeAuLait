@@ -18,10 +18,10 @@ import lombok.ToString;
 @Getter
 @ToString
 public class LoginInfo {
-    @ApiModelProperty("User id")
+    @ApiModelProperty(value = "User id", required = true)
     private String userId;
 
-    @ApiModelProperty("User password")
+    @ApiModelProperty(value = "User password", required = true)
     private String password;
 
     public Boolean validParam() {
