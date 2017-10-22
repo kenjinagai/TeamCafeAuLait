@@ -18,9 +18,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
 
 import app.constant.Constants;
+import app.entity.ExtendedAuthentication;
+import app.entity.User;
 import app.model.AuthResult;
 import app.model.LoginInfo;
 import app.model.LoginUserDetail;
+import app.repository.ExtendedAuthenticationRepository;
+import app.repository.UserRepository;
 
 /**
  * Login Service.
@@ -34,6 +38,12 @@ public class AuthenticationService {
 
     @Autowired
     private AuthenticationManager authMgr;
+
+    @Autowired
+    private ExtendedAuthenticationRepository extAuthrepo;
+
+    @Autowired
+    private UserRepository userRepo;
 
     /**
      * Login.
@@ -57,6 +67,32 @@ public class AuthenticationService {
                 principal.getAuthorities()
                         .stream().map(authority -> authority.getAuthority())
                         .collect(Collectors.toList()));
+    }
+
+    /**
+     * Extended Authentication.
+     * e.g. IC Card.
+     *
+     * @param extendedAuthentication ExtendedAuthentication which has identification data.
+     * @return User Authentication Parameter
+     * @throws IllegalArgumentException invalid parameter or Extended Authentication doesn't exist.
+     * @throws AuthenticationException authentication failure
+     * @throws Exception internal error
+     */
+    public AuthResult extendedAuthentication(final ExtendedAuthentication extendedAuthentication)
+            throws IllegalArgumentException, AuthenticationException, Exception {
+        if (extendedAuthentication.getExtendedAuthenticationValue() == null) {
+            throw new IllegalArgumentException();
+        }
+        final ExtendedAuthentication extendeAuth = this.extAuthrepo
+                .findByExtendedAuthenticationValueStartingWith(
+                        extendedAuthentication.getExtendedAuthenticationValue());
+
+        final User user = this.userRepo.findOne(extendeAuth.getUserId());
+
+        final LoginInfo loginInfo = new LoginInfo().setUserId(user.getUserId())
+                .setPassword(user.getEncodedPassword());
+        return this.login(loginInfo);
     }
 
     /**

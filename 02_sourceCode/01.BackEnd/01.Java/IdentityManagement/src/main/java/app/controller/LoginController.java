@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.entity.ExtendedAuthentication;
 import app.model.AuthResult;
 import app.model.LoginInfo;
 import app.service.AuthenticationService;
@@ -79,6 +80,15 @@ public class LoginController {
         return res;
     }
 
+    /**
+     * Login with Smart Card.
+     *
+     * @param HttpServletRequest request
+     * @param HttpServletResponse response
+     * @return ResponseEntity
+     *
+     * @author Kenji Nagai.
+     */
     @RequestMapping(value = "card", method = RequestMethod.POST)
     @ApiOperation(value = "Login with card", notes = "#Login with a smart card. \n"
             + "* Return logined user infomation")
@@ -88,6 +98,25 @@ public class LoginController {
             @ApiResponse(code = 500, message = "Internal Server Error") })
     public ResponseEntity<AuthResult> loginSmartCard(final HttpServletRequest request,
             final HttpServletResponse response) {
-        return new ResponseEntity<AuthResult>(null, null, HttpStatus.CREATED);
+        ResponseEntity<AuthResult> res = null;
+        AuthResult authResult = null;
+        try {
+            final ExtendedAuthentication extendedAuthentication = new ExtendedAuthentication();
+            extendedAuthentication.setExtendedAuthenticationValue(String.valueOf(1));
+            authResult = authService.extendedAuthentication(extendedAuthentication);
+            // If authentication success, set CSRF in cookie.
+            authService.setCsrfCookie(authResult, request, response);
+            res = new ResponseEntity<AuthResult>(authResult, null, HttpStatus.CREATED);
+        } catch (final AuthenticationException e) {
+            // If authentication failed, return unauthrized.
+            res = new ResponseEntity<AuthResult>(authResult, null, HttpStatus.UNAUTHORIZED);
+            LOGGER.error("authError", e.getMessage());
+        } catch (final Exception e) {
+            // Other exception.
+            res = new ResponseEntity<AuthResult>(authResult, null,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+            LOGGER.error("Exception", e.getMessage());
+        }
+        return res;
     }
 }
