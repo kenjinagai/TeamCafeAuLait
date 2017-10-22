@@ -35,9 +35,8 @@ public class User implements Serializable {
     private String userId;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
-    @JsonIgnore
     @ApiModelProperty(value = "User password")
-    private String encodedPassword;
+    private String password;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(50)")
     @ApiModelProperty("User name")
