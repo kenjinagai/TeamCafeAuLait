@@ -3,6 +3,7 @@ package app.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,14 +65,16 @@ public class UserController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity createUser(
+    public void createUser(
             @ApiParam(value = "Authentication token for XSRF.", required = true) @RequestHeader(value = "X-XSRF-TOKEN") final String token,
             final HttpServletRequest request,
+            final HttpServletResponse response,
             @RequestBody final User user) {
         if (!authService.isAdmin(request)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
         }
         this.userService.saveUser(user);
-        return new ResponseEntity(HttpStatus.CREATED);
+        response.setStatus(HttpStatus.CREATED.value());
+        return;
     }
 }
