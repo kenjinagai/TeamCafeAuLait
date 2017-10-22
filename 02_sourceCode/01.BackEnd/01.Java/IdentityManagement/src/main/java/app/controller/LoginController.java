@@ -47,7 +47,8 @@ public class LoginController {
      * @author Kenji Nagai.
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
-    @ApiOperation(value = "Login with id/passwrod", notes = "Login with user id and password. <br>Return logined user infomation")
+    @ApiOperation(value = "Login with id/passwrod", notes = "# Login with user id and password. \n"
+            + "* Return logined user infomation")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = { @ApiResponse(code = 401, message = "Invalid user id or password."),
             @ApiResponse(code = 500, message = "Internal Server Error") })
@@ -79,8 +80,8 @@ public class LoginController {
     }
 
     @RequestMapping(value = "card", method = RequestMethod.POST)
-    @ApiOperation(value = "Login with card", notes = "Login with a smart card."
-            + "<br>Return logined user infomation")
+    @ApiOperation(value = "Login with card", notes = "#Login with a smart card. \n"
+            + "* Return logined user infomation")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = { @ApiResponse(code = 401, message = "Not found smart card."),
             @ApiResponse(code = 408, message = "時間内にスマートカードがかざされない場合"),

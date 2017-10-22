@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import app.entity.Role;
 import app.service.AuthenticationService;
 import app.service.RoleService;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -30,6 +31,7 @@ public class RoleController {
     private RoleService roleService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
+    @ApiOperation(value = "Get role list.", notes = "# Get role list. \n")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = { @ApiResponse(code = 403, message = "Invalid X-XSRF-TOKEN."),
             @ApiResponse(code = 500, message = "Internal Server Error") })
