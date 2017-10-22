@@ -32,9 +32,9 @@ public class LoginUserDetail extends org.springframework.security.core.userdetai
      * @param User user
      */
     public LoginUserDetail(User user) {
-        super(user.getName(), user.getPassword(), new ArrayList<GrantedAuthority>());
+        super(user.getName(), user.getEncodedPassword(), new ArrayList<GrantedAuthority>());
         name = user.getName();
-        password = user.getPassword();
+        password = user.getEncodedPassword();
         //User -> list<Role> -> list<Permission> -> list<String>
         permissionList = user.getRoleList()
                 .stream()

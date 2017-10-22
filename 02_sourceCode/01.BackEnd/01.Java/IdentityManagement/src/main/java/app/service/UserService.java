@@ -15,7 +15,7 @@ public class UserService {
 
     public List<User> getAllUser() {
         final List<User> resUser = repository.findAll();
-        resUser.forEach(user -> user.setPassword(null));
+        resUser.forEach(user -> user.setEncodedPassword(null));
         return resUser;
     }
 
