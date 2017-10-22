@@ -34,7 +34,7 @@ public class User implements Serializable {
     @ApiModelProperty(value = "User id")
     private String userId;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
+    @Column(name = "encoded_password", nullable = false, columnDefinition = "VARCHAR(255)")
     @ApiModelProperty(value = "User password")
     private String password;
 
