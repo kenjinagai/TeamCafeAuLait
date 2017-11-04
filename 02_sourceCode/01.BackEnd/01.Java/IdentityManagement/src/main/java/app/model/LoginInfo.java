@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  * Login Info.
@@ -17,11 +18,12 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@Accessors(chain = true)
 public class LoginInfo {
-    @ApiModelProperty("User id")
+    @ApiModelProperty(value = "User id", required = true)
     private String userId;
 
-    @ApiModelProperty("User password")
+    @ApiModelProperty(value = "User password", required = true)
     private String password;
 
     public Boolean validParam() {
