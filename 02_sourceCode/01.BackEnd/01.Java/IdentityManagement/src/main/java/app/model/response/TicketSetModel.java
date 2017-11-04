@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Ticket Model.
+ * Ticket Set Model.
  * 
  * This class is used by "Ticket Controller".
  *
@@ -16,14 +16,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketModel {
+public class TicketSetModel {
     @ApiModelProperty("Coffee type")
     private CoffeeType name;
     
-    @ApiModelProperty("Remainig tickets count")
-    private Integer remainingCount;
+    @ApiModelProperty("Ticket set count")
+    private Integer buyCount;
     
-    //This property doesn't need because "Ticket Controller" isn't used.
-    //@ApiModelProperty("Used tickets count")
-    //private Integer useCount;
+    @ApiModelProperty("Ticket set price")
+    private Integer buyPrice;
 }

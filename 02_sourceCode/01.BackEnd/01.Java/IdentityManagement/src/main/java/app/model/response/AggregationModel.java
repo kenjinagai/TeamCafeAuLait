@@ -6,9 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Ticket Model.
+ * Aggregation Model.
  * 
- * This class is used by "Ticket Controller".
+ * This class is used by "AggregationController".
  *
  * @author Shoji Yamada
  *
@@ -16,14 +16,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketModel {
+public class AggregationModel {
     @ApiModelProperty("Coffee type")
     private CoffeeType name;
     
-    @ApiModelProperty("Remainig tickets count")
-    private Integer remainingCount;
+    @ApiModelProperty("Consumed tickets count")
+    private Integer consumedCount;
     
-    //This property doesn't need because "Ticket Controller" isn't used.
-    //@ApiModelProperty("Used tickets count")
-    //private Integer useCount;
+    @ApiModelProperty("Consumed price count")
+    private Integer consumedPrice;
 }
