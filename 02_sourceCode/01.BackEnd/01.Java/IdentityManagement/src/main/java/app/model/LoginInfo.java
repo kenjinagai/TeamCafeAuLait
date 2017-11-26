@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.Accessors;
 
 /**
  * Login Info.
@@ -18,7 +17,6 @@ import lombok.experimental.Accessors;
 @Setter
 @Getter
 @ToString
-@Accessors(chain = true)
 public class LoginInfo {
     @ApiModelProperty(value = "User id", required = true)
     private String userId;

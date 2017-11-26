@@ -90,8 +90,9 @@ public class AuthenticationService {
 
         final User user = this.userRepo.findOne(extendeAuth.getUserId());
 
-        final LoginInfo loginInfo = new LoginInfo().setUserId(user.getUserId())
-                .setPassword(user.getEncodedPassword());
+        final LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setUserId(user.getUserId());
+        loginInfo.setPassword(user.getEncodedPassword());
         return this.login(loginInfo);
     }
 
