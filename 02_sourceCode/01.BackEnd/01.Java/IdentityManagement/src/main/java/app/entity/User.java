@@ -3,6 +3,7 @@ package app.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,8 +15,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -58,7 +57,12 @@ public class User implements Serializable {
     @JoinTable(name = "user_has_role", joinColumns = @JoinColumn(name = "user_name", referencedColumnName = "name"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roleList;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="extended_authentication")
-    private ExtendedAuthentication extendedAuthentication;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name="extended_authentication")
+//    private ExtendedAuthentication extendedAuthentication;
+    
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="remaining_ticket")
+    private RemainingTicket remainingTicket;
+
 }

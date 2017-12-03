@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.7.18, for Win32 (AMD64)
+-- MySQL dump 10.13  Distrib 5.7.18, for Win64 (x86_64)
 --
 -- Host: localhost    Database: user
 -- ------------------------------------------------------
@@ -68,6 +68,32 @@ INSERT INTO `permission` VALUES (1,'登録権限','create'),(2,'参照権限','r
 UNLOCK TABLES;
 
 --
+-- Table structure for table `remaining_ticket`
+--
+
+DROP TABLE IF EXISTS `remaining_ticket`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `remaining_ticket` (
+  `ticket_id` int(11) NOT NULL,
+  `remaining_dolce` int(10) unsigned NOT NULL,
+  `remaining_barista` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`ticket_id`),
+  UNIQUE KEY `idticket_UNIQUE` (`ticket_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `remaining_ticket`
+--
+
+LOCK TABLES `remaining_ticket` WRITE;
+/*!40000 ALTER TABLE `remaining_ticket` DISABLE KEYS */;
+INSERT INTO `remaining_ticket` VALUES (1,1,1),(2,2,2),(3,3,3);
+/*!40000 ALTER TABLE `remaining_ticket` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `role`
 --
 
@@ -130,9 +156,12 @@ CREATE TABLE `user` (
   `encoded_password` varchar(255) NOT NULL,
   `name` varchar(50) NOT NULL,
   `extended_authentication` int(11) DEFAULT NULL,
+  `remaining_ticket` int(11) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `UK_gj2fy3dcix7ph7k8684gka40c` (`name`),
   UNIQUE KEY `extended_authentication_UNIQUE` (`extended_authentication`),
+  KEY `FKhog873vdny78xivil7x3a5wyh` (`remaining_ticket`),
+  CONSTRAINT `FKhog873vdny78xivil7x3a5wyh` FOREIGN KEY (`remaining_ticket`) REFERENCES `remaining_ticket` (`ticket_id`),
   CONSTRAINT `FKtos75qhl08dib2gbyxk6hypf` FOREIGN KEY (`extended_authentication`) REFERENCES `extended_authentication` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -143,7 +172,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('admin','admin','鈴木一朗',1),('guest','guest','佐藤花子',2),('user','user','田中太郎',3);
+INSERT INTO `user` VALUES ('admin','admin','鈴木一朗',1,1),('guest','guest','佐藤花子',2,2),('user','user','田中太郎',3,3);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -211,4 +240,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-22 18:39:28
+-- Dump completed on 2017-12-03 21:55:15

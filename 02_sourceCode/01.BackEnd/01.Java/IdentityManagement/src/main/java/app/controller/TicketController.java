@@ -50,7 +50,7 @@ public class TicketController {
         return null;
     }
 
-    @RequestMapping(value = "/Ticket/ドルチェ?num=7", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/Ticket/?buycount = ticketcount", method = RequestMethod.POST)
     @ApiOperation(value = "Buy Coffee Ticket.", notes = "Buy the seven of the tickets.")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = { @ApiResponse(code = 204, message = "コーヒーが選択されていません。")})
