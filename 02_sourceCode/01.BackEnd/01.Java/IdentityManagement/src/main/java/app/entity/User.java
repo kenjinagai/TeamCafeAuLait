@@ -58,7 +58,7 @@ public class User implements Serializable {
     @JoinTable(name = "user_has_role", joinColumns = @JoinColumn(name = "user_name", referencedColumnName = "name"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roleList;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="extended_authentication")
-    private ExtendedAuthentication extendedAuthentication;
+    @Column(nullable = true)
+    @ApiModelProperty(value = "Id for Extended Authentication. e.g. Card Authentication.", name = "extendedAuthenticationId")
+    private Integer extendedAuthentication;
 }
