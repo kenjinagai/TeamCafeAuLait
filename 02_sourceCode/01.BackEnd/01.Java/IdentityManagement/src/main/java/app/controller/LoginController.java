@@ -57,25 +57,21 @@ public class LoginController {
             final HttpServletRequest request,
             final HttpServletResponse response) {
         ResponseEntity<AuthResult> res = null;
-        if (!loginInfo.validParam()) {
-            res = new ResponseEntity<AuthResult>(HttpStatus.UNAUTHORIZED);
-        } else {
-            AuthResult authResult = null;
-            try {
-                authResult = authService.login(loginInfo);
-                // If authentication success, set CSRF in cookie.
-                authService.setCsrfCookie(authResult, request, response);
-                res = new ResponseEntity<AuthResult>(authResult, null, HttpStatus.CREATED);
-            } catch (final AuthenticationException e) {
-                // If authentication failed, return unauthrized.
-                res = new ResponseEntity<AuthResult>(authResult, null, HttpStatus.UNAUTHORIZED);
-                LOGGER.error("authError", e.getMessage());
-            } catch (final Exception e) {
-                // Other exception.
-                res = new ResponseEntity<AuthResult>(authResult, null,
-                        HttpStatus.INTERNAL_SERVER_ERROR);
-                LOGGER.error("Exception", e.getMessage());
-            }
+        AuthResult authResult = null;
+        try {
+            authResult = authService.login(loginInfo);
+            // If authentication success, set CSRF in cookie.
+            authService.setCsrfCookie(authResult, request, response);
+            res = new ResponseEntity<AuthResult>(authResult, null, HttpStatus.CREATED);
+        } catch (final AuthenticationException e) {
+            // If authentication failed, return unauthrized.
+            res = new ResponseEntity<AuthResult>(authResult, null, HttpStatus.UNAUTHORIZED);
+            LOGGER.error("authError", e.getMessage());
+        } catch (final Exception e) {
+            // Other exception.
+            res = new ResponseEntity<AuthResult>(authResult, null,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+            LOGGER.error("Exception", e.getMessage());
         }
         return res;
     }
