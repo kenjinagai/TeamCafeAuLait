@@ -12,6 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.NumberFormat;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -31,14 +35,18 @@ public class Role implements Serializable {
     @Id
     @GeneratedValue
     @ApiModelProperty(value = "Role id")
+    @NumberFormat
+    @NotNull
     private Integer id;
 
     @Column(nullable = false)
     @ApiModelProperty(value = "Role name")
+    @NotEmpty
     private String name;
 
     @Column(nullable = false)
     @ApiModelProperty(value = "Role arias")
+    @NotEmpty
     private String alias;
 
     @ManyToMany(fetch = FetchType.LAZY)

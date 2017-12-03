@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,7 +68,7 @@ public class UserController {
             + "* This endpoint is allowed to call by Admin. \n"
             + "* Request body example is following. \n"
             + "``` \n"
-            + "{ \n    \"name\": \"test_user_name\",  \n    \"password\": \"test_pass\",  \n    \"roleList\": [ \n        { \n            \"id\": 1 \n        } \n    ],  \n    \"userId\": \"test_user\" \n} \n"
+            + "{ \n    \"name\": \"山田 太郎\",  \n    \"password\": \"testPass\",  \n    \"roleList\": [ \n        { \n            \"id\": 1 \n        } \n    ],  \n    \"userId\": \"testUser\" \n} \n"
             + "``` \n")
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
@@ -77,7 +78,7 @@ public class UserController {
             @ApiParam(value = "Authentication token for XSRF.", required = true) @RequestHeader(value = "X-XSRF-TOKEN") final String token,
             final HttpServletRequest request,
             final HttpServletResponse response,
-            @RequestBody final User user) {
+            @Validated @RequestBody final User user) {
         if (!authService.isAdmin(request)) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
         }

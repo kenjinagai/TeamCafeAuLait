@@ -7,6 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.NumberFormat;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -25,10 +29,13 @@ public class Permission implements Serializable {
     @Id
     @GeneratedValue
     @ApiModelProperty("Permission id. e.g. create, read, manageUser")
+    @NumberFormat
+    @NotNull
     private Integer id;
 
     @Column(nullable = false)
     @ApiModelProperty("Permission name. e.g. guest, user, admin")
+    @NotEmpty
     private String name;
 
     @Column(nullable = false)
