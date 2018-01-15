@@ -7,9 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 
+ *
  * Response Model for GET /tickets
- * 
+ *
  * @author Shoji Yamada
  *
  */
@@ -17,7 +17,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetTicketResModel {
-    private List<TicketModel> tickets;
+    private Tickets tickets;
 
-    private List<TicketSetModel> ticketSet;
+    private TicketSets ticketSet;
+
+   @Data
+   @NoArgsConstructor
+   @AllArgsConstructor
+   public class Tickets {
+       private TicketModel barista;
+       private TicketModel dolce;
+   }
+
+   @Data
+   @NoArgsConstructor
+   @AllArgsConstructor
+   public class TicketSets {
+       private TicketSetModel barista;
+       private TicketSetModel dolce;
+   }
+
 }

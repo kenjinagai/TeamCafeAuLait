@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Ticket Set Model.
- * 
+ *
  * This class is used by "Ticket Controller".
  *
  * @author Shoji Yamada
@@ -17,12 +17,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TicketSetModel {
-    @ApiModelProperty("Coffee type")
-    private CoffeeType name;
-    
     @ApiModelProperty("Ticket set count")
     private Integer buyCount;
-    
+
     @ApiModelProperty("Ticket set price")
     private Integer buyPrice;
 }

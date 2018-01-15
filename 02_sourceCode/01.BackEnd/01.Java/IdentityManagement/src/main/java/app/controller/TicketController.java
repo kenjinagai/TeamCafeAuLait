@@ -1,7 +1,5 @@
 package app.controller;
 
-import java.util.Arrays;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.model.response.CoffeeType;
 import app.model.response.GetTicketResModel;
+import app.model.response.TicketModel;
+import app.model.response.TicketSetModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -39,20 +39,14 @@ public class TicketController {
             @ApiParam(value = "Authentication token for XSRF.", required = true) @RequestHeader(value = "X-XSRF-TOKEN") final String token) {
         final GetTicketResModel resModel = new GetTicketResModel();
 
-        final TicketModel baristaTicket = new TicketModel();
-        baristaTicket.setName(CoffeeType.BARISTA);
-        baristaTicket.setRemainingCount(1);
+        final TicketModel baristaTicket = new TicketModel(1);
+        final TicketModel dolceTicket = new TicketModel(2);
+        resModel.setTickets(resModel.new Tickets(baristaTicket, dolceTicket));
 
-        final TicketModel dolceTicket = new TicketModel();
-        dolceTicket.setName(CoffeeType.DOLCE);
-        dolceTicket.setRemainingCount(2);
+        final TicketSetModel baristaSet = new TicketSetModel(7, 250);
+        final TicketSetModel dolceSet = new TicketSetModel(7, 500);
+        resModel.setTicketSet(resModel.new TicketSets(baristaSet, dolceSet));
 
-        resModel.setTickets(Arrays.asList(baristaTicket, dolceTicket));
-
-        final TicketSetModel baristaSet = new TicketSetModel(CoffeeType.BARISTA, 7, 250);
-        final TicketSetModel dolceSet = new TicketSetModel(CoffeeType.DOLCE, 7, 500);
-
-        resModel.setTicketSet(Arrays.asList(baristaSet, dolceSet));
         return new ResponseEntity<GetTicketResModel>(resModel, null, HttpStatus.OK);
     }
 
