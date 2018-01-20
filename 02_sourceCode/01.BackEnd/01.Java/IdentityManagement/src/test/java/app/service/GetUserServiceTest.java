@@ -7,15 +7,21 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import app.entity.Role;
 import app.entity.User;
 import app.repository.UserRepository;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 public class GetUserServiceTest {
     // テスト対象
     @InjectMocks
@@ -29,11 +35,14 @@ public class GetUserServiceTest {
      * GetUserService#getAllUser tests.
      */
 
-    @Test
-    public void getAllUser_expectAllUser() {
+    @Before
+    public void init() {
         // Mockの初期化
         MockitoAnnotations.initMocks(this);
+    }
 
+    @Test
+    public void getAllUser_expectAllUser() {
         // Mockが返す値を作成
         final String testName = "永井　健二";
         final String testUserId = "nagai";
@@ -63,5 +72,11 @@ public class GetUserServiceTest {
         assertThat(actUser.getName(), is(testName));
         assertThat(actUser.getUserId(), is(testUserId));
         assertThat(actUser.getRoleList().get(0), is(expRole));
+    }
+
+    @Test
+    public void throwTest() {
+        final User user = new User();
+        this.target.saveUser(user);
     }
 }
