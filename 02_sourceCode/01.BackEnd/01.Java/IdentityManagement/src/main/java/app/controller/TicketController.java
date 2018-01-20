@@ -2,6 +2,7 @@ package app.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,7 @@ public class TicketController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = { @ApiResponse(code = 403, message = ""),
             @ApiResponse(code = 500, message = "Internal Server Error") })
-
+    @CrossOrigin
     public ResponseEntity<GetTicketResModel> getTickets(
             @ApiParam(value = "Authentication token for XSRF.", required = true) @RequestHeader(value = "X-XSRF-TOKEN") final String token) {
         final GetTicketResModel resModel = new GetTicketResModel();

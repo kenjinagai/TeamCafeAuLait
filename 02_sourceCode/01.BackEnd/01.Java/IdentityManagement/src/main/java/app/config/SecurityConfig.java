@@ -16,6 +16,11 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.google.common.collect.ImmutableList;
 
 import app.service.LoginUserDetailsService;
 
@@ -31,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         final RequestMatcher csrfRequestMatcher = new RequestMatcher() {
+
             // CSRF対象外URL:
             private final AntPathRequestMatcher[] requestMatchers = {
                     new AntPathRequestMatcher("/index.html"),
@@ -55,7 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             }
         };
 
-        http.authorizeRequests()
+        http
+                .authorizeRequests()
                 // Anti Match
                 .antMatchers("/index.html",
                         "/login",
@@ -76,7 +83,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).and()
                 .csrf()
                 .requireCsrfProtectionMatcher(csrfRequestMatcher)
-                .csrfTokenRepository(this.csrfTokenRepository());
+                .csrfTokenRepository(this.csrfTokenRepository())
+                .and()
+                .cors();
     }
 
     // セッションヘッダーにCSRFトークンを設定
@@ -111,4 +120,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .passwordEncoder(passwordEncoder());
         }
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(ImmutableList.of("*"));
+        configuration.setAllowedMethods(ImmutableList.of("HEAD",
+                "GET", "POST", "PUT", "DELETE", "PATCH"));
+        // setAllowCredentials(true) is important, otherwise:
+        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
+        configuration.setAllowCredentials(true);
+        // setAllowedHeaders is important! Without it, OPTIONS preflight request
+        // will fail with 403 Invalid CORS request
+        //        configuration.setAllowedHeaders(
+        //                ImmutableList.of("Access-Control-Allow-Origin", "Origin", "Authorization",
+        //                        "Cache-Control", "Content-Type",
+        //                        "X-XSRF-TOKEN"));
+        configuration.setAllowedHeaders(
+                ImmutableList.of("*"));
+
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
 }
