@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import app.entity.ExtendedAuthentication;
 import app.model.AuthResult;
 import app.model.LoginInfo;
+import app.model.response.LoginResponse;
 import app.service.AuthenticationService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -53,23 +54,26 @@ public class LoginController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = { @ApiResponse(code = 401, message = "Invalid user id or password."),
             @ApiResponse(code = 500, message = "Internal Server Error") })
-    public ResponseEntity<AuthResult> login(@RequestBody final LoginInfo loginInfo,
+    public ResponseEntity<LoginResponse> login(@RequestBody final LoginInfo loginInfo,
             final HttpServletRequest request,
             final HttpServletResponse response) {
-        ResponseEntity<AuthResult> res = null;
+        LoginResponse loginRes = null;
+        ResponseEntity<LoginResponse> res = null;
         AuthResult authResult = null;
         try {
             authResult = authService.login(loginInfo);
             // If authentication success, set CSRF in cookie.
             authService.setCsrfCookie(authResult, request, response);
-            res = new ResponseEntity<AuthResult>(authResult, null, HttpStatus.CREATED);
+            loginRes = new LoginResponse(authResult, authService.getToken(authResult, request));
+
+            res = new ResponseEntity<LoginResponse>(loginRes, null, HttpStatus.CREATED);
         } catch (final AuthenticationException e) {
             // If authentication failed, return unauthrized.
-            res = new ResponseEntity<AuthResult>(authResult, null, HttpStatus.UNAUTHORIZED);
+            res = new ResponseEntity<LoginResponse>(null, null, HttpStatus.UNAUTHORIZED);
             LOGGER.error("authError", e.getMessage());
         } catch (final Exception e) {
             // Other exception.
-            res = new ResponseEntity<AuthResult>(authResult, null,
+            res = new ResponseEntity<LoginResponse>(null, null,
                     HttpStatus.INTERNAL_SERVER_ERROR);
             LOGGER.error("Exception", e.getMessage());
         }

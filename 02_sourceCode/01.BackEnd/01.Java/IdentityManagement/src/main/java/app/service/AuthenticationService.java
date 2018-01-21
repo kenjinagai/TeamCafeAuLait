@@ -125,6 +125,19 @@ public class AuthenticationService {
         }
     }
 
+    public String getToken(final AuthResult authResult, final HttpServletRequest request) {
+        String resToken = null;
+        if ((authResult != null) && (authResult.getUserName() != null)) {
+            final CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+            // If there isn't a CSRF token in request, set a CRSR token.
+            if (csrf != null) {
+                resToken = csrf.getToken();
+            }
+        }
+        return resToken;
+
+    }
+
     /**
      * Whether user is admin.
      *
