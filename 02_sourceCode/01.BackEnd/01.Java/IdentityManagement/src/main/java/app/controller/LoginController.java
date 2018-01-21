@@ -64,7 +64,7 @@ public class LoginController {
             authResult = authService.login(loginInfo);
             // If authentication success, set CSRF in cookie.
             authService.setCsrfCookie(authResult, request, response);
-            loginRes = new LoginResponse(authResult, authService.getToken(authResult, request));
+            loginRes = new LoginResponse(authResult);
 
             res = new ResponseEntity<LoginResponse>(loginRes, null, HttpStatus.CREATED);
         } catch (final AuthenticationException e) {
