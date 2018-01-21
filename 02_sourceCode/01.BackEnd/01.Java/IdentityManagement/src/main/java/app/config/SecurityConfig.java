@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -80,7 +82,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated() // 上記にマッチしなければ未認証の場合エラー
                 .and()
                 // ログアウト実行apiを指定
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).and()
+                .logout()
+                .defaultLogoutSuccessHandlerFor(
+                        new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT),
+                        request -> "XMLHttpRequest".equals(request.getHeader("X-Requested-With")))
+                .permitAll()
+                .and()
                 .csrf()
                 .requireCsrfProtectionMatcher(csrfRequestMatcher)
                 .csrfTokenRepository(this.csrfTokenRepository())
