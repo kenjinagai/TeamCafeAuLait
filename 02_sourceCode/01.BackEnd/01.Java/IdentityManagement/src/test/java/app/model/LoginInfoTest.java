@@ -5,9 +5,21 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import app.util.UtilValidator;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class LoginInfoTest {
     private LoginInfo defTestModel;
+
+    @Autowired
+    private UtilValidator validator;
+
     private static final String DEF_TEST_USER_ID = "test";
     private static final String DEF_TEST_PASSWORD = "test";
     private static final String DEF_TEST_TEXT_LENGHT_15 = "abcdefghijklmno";
@@ -22,60 +34,56 @@ public class LoginInfoTest {
     }
 
     @Test
-    public void 事前準備に使用した値がtrueが返される() {
-        assertThat(defTestModel.validParam(), is(true));
+    public void 事前準備に使用した値がfalseが返される() {
+        assertThat(validator.hasConstraintViolations(this.defTestModel), is(false));
     }
 
     @Test
-    public void userIdが15文字の場合trueが返される() {
+    public void userIdが15文字の場合falseが返される() {
         defTestModel.setUserId(DEF_TEST_TEXT_LENGHT_15);
-        assertThat(defTestModel.validParam(), is(true));
+        assertThat(validator.hasConstraintViolations(this.defTestModel), is(false));
     }
 
     @Test
-    public void passwodが15文字の場合がtrue返される() {
+    public void passwodが15文字の場合がfalseが返される() {
         defTestModel.setPassword(DEF_TEST_TEXT_LENGHT_15);
-        assertThat(defTestModel.validParam(), is(true));
+        assertThat(validator.hasConstraintViolations(this.defTestModel), is(false));
     }
 
     @Test
-    public void userIdが16文字の場合falseが返される() {
+    public void userIdが16文字の場合true返される() {
         defTestModel.setUserId(DEF_TEST_TEXT_LENGHT_16);
-        assertThat(defTestModel.validParam(), is(false));
+        assertThat(validator.hasConstraintViolations(this.defTestModel), is(true));
     }
 
     @Test
-    public void passwordが16文字の場合falseが返される() {
+    public void passwordが16文字の場合trueが返される() {
         defTestModel.setPassword(DEF_TEST_TEXT_LENGHT_16);
-        assertThat(defTestModel.validParam(), is(false));
+        assertThat(validator.hasConstraintViolations(this.defTestModel), is(true));
     }
 
     @Test
-    public void userIdが日本語の場合falseが返される() {
+    public void userIdが日本語の場合trueが返される() {
         defTestModel.setUserId(JAPANESE_TEXT);
-        assertThat(defTestModel.validParam(), is(false));
+        assertThat(validator.hasConstraintViolations(this.defTestModel), is(true));
     }
 
     @Test
-    public void passwordが日本語の場合falseが返される() {
+    public void passwordが日本語の場合trueが返される() {
         defTestModel.setPassword(JAPANESE_TEXT);
-        assertThat(defTestModel.validParam(), is(false));
+        assertThat(validator.hasConstraintViolations(this.defTestModel), is(true));
     }
 
     @Test
-    public void userIdがnullの場合falseが返される() {
+    public void userIdがnullの場合trueが返される() {
         defTestModel.setUserId(null);
-        assertThat(defTestModel.validParam(), is(false));
+        assertThat(validator.hasConstraintViolations(this.defTestModel), is(true));
     }
 
     @Test
-    public void passwordがnullの場合falseが返される() {
+    public void passwordがnullの場合trueが返される() {
         defTestModel.setPassword(null);
-        assertThat(defTestModel.validParam(), is(false));
+        assertThat(validator.hasConstraintViolations(this.defTestModel), is(true));
     }
 
-    @Test
-    public void toString試験() {
-        defTestModel.toString();
-    }
 }
