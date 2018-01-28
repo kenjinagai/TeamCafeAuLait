@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 import app.service.CardReadService;
 
 @Service
-public class UtilValidator {
+public class BeanValidator {
     Validator validator;
-    private static final Logger LOGGER = LoggerFactory.getLogger(UtilValidator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BeanValidator.class);
 
     @Autowired
     CardReadService service;

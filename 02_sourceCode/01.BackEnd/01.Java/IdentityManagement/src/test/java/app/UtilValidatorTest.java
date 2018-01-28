@@ -11,14 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import app.util.UtilValidator;
+import app.util.BeanValidator;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UtilValidatorTest {
 
     @Autowired
-    private UtilValidator target;
+    private BeanValidator target;
 
     public class TestModel {
         @NotNull

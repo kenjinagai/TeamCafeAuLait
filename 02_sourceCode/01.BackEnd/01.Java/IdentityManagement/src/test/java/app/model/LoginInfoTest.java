@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import app.util.UtilValidator;
+import app.util.BeanValidator;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -18,7 +18,7 @@ public class LoginInfoTest {
     private LoginInfo defTestModel;
 
     @Autowired
-    private UtilValidator validator;
+    private BeanValidator validator;
 
     private static final String DEF_TEST_USER_ID = "test";
     private static final String DEF_TEST_PASSWORD = "test";
