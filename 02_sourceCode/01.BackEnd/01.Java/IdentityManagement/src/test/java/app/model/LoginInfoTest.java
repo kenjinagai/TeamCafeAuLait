@@ -33,7 +33,7 @@ public class LoginInfoTest {
     }
 
     @Test
-    public void passwodが15文字の場合がtrue返される() {
+    public void () {
         defTestModel.setPassword(DEF_TEST_TEXT_LENGHT_15);
         assertThat(defTestModel.validParam(), is(true));
     }
