@@ -51,18 +51,19 @@ public class User implements Serializable {
     @Column(nullable = false, columnDefinition = "VARCHAR(50)")
     @ApiModelProperty("User name")
     @Size(min = 1, max = 20)
-    private String name;
+    private String userName;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_has_role", joinColumns = @JoinColumn(name = "user_name", referencedColumnName = "name"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @JoinTable(name = "user_has_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roleList;
 
 //    @OneToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name="extended_authentication")
-//    private ExtendedAuthentication extendedAuthentication;
-    
+    @Column(nullable = true, columnDefinition = "INT(11)")
+    private Integer extendedAuthenticationId;
+
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="remaining_ticket")
-    private RemainingTicket remainingTicket;
+    private RemainingTicket remainingTicketId;
 
 }

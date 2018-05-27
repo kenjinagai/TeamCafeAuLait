@@ -30,11 +30,7 @@ public class ExtendedAuthentication implements Serializable {
     @GeneratedValue
     @Column(nullable = false)
     @ApiModelProperty(value = "extended id")
-    private Integer id;
-
-    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
-    @ApiModelProperty(value = "User id")
-    private String userId;
+    private Integer extendedAuthenticationId ;
 
     @Column(nullable = true, columnDefinition = "VARCHAR(255)")
     @ApiModelProperty(value = "Extened authentication value. \n"

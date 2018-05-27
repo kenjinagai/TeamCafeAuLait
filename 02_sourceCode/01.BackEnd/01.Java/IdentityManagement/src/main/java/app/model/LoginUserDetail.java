@@ -32,21 +32,21 @@ public class LoginUserDetail extends org.springframework.security.core.userdetai
      * @param User user
      */
     public LoginUserDetail(User user) {
-        super(user.getName(), user.getEncodedPassword(), new ArrayList<GrantedAuthority>());
-        name = user.getName();
+        super(user.getUserName(), user.getEncodedPassword(), new ArrayList<GrantedAuthority>());
+        name = user.getUserName();
         password = user.getEncodedPassword();
         //User -> list<Role> -> list<Permission> -> list<String>
         permissionList = user.getRoleList()
                 .stream()
                 .flatMap(role -> role.getPermissionList()
                         .stream()
-                        .map(permission -> permission.getName()))
+                        .map(permission -> permission.getPermissionName()))
                 .collect(Collectors.toList());
 
         //User -> list<Role> -> list<GrantedAuthority>
         authorities = user.getRoleList()
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
                 .collect(Collectors.toList());
     }
 

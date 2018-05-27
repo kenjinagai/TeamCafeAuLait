@@ -20,7 +20,7 @@ public class RemainingTicket implements Serializable {
     @Id
     @GeneratedValue
     @Column(nullable = false)
-    private Integer ticketId;
+    private Integer remainingTicketId ;
 
     @Column(nullable = false, columnDefinition="INT(10)")
     @ApiModelProperty(value = "Remaining dolce ticket number")

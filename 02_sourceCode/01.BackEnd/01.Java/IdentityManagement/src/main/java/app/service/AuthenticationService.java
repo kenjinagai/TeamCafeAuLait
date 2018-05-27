@@ -85,10 +85,12 @@ public class AuthenticationService {
             throw new IllegalArgumentException();
         }
         final ExtendedAuthentication extendeAuth = this.extAuthrepo
-                .findByExtendedAuthenticationValueStartingWith(
+                .findByExtendedAuthenticationValueIs(
                         extendedAuthentication.getExtendedAuthenticationValue());
 
-        final User user = this.userRepo.findOne(extendeAuth.getUserId());
+        final User user = this.userRepo
+                .findByExtendedAuthenticationIdIs(
+                        extendeAuth.getExtendedAuthenticationId());
 
         final LoginInfo loginInfo = new LoginInfo();
         loginInfo.setUserId(user.getUserId());

@@ -37,19 +37,19 @@ public class Role implements Serializable {
     @ApiModelProperty(value = "Role id")
     @NumberFormat
     @NotNull
-    private Integer id;
+    private Integer roleId;
 
     @Column(nullable = false)
     @ApiModelProperty(value = "Role name")
     @NotEmpty
-    private String name;
+    private String roleName;
 
     @Column(nullable = false)
     @ApiModelProperty(value = "Role arias")
     @NotEmpty
-    private String alias;
+    private String roleAlias;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "role_has_permission", joinColumns = @JoinColumn(name = "role_name", referencedColumnName = "name"), inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
+    @JoinTable(name = "role_has_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
     List<Permission> permissionList;
 }

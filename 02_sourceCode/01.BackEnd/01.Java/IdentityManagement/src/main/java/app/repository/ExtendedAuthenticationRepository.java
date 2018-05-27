@@ -20,5 +20,5 @@ public interface ExtendedAuthenticationRepository
      * @param itemPrefix extended_authentication_value prefix
      * @return ExtendedAuthentication
      */
-    public ExtendedAuthentication findByExtendedAuthenticationValueStartingWith(String itemPrefix);
+    public ExtendedAuthentication findByExtendedAuthenticationValueIs(String itemPrefix);
 }

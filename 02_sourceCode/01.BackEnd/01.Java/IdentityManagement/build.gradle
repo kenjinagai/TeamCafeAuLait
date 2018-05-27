@@ -57,7 +57,7 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-web")
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
-    compileOnly("org.projectlombok:lombok:1.16.16")
+    compileOnly("org.projectlombok:lombok:1.16.20")
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
     // https://mvnrepository.com/artifact/org.mybatis/mybatis
     // compile group: 'org.mybatis', name: 'mybatis', version: '3.4.4'

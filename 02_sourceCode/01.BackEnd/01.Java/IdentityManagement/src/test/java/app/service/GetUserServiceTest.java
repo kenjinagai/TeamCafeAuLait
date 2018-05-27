@@ -50,12 +50,12 @@ public class GetUserServiceTest {
         final String testRoleAlias = "管理者";
 
         final User expUser = new User();
-        expUser.setName(testName);
+        expUser.setUserName(testName);
         expUser.setUserId(testUserId);
         final Role expRole = new Role();
-        expRole.setId(1);
-        expRole.setName(testRoleName);
-        expRole.setAlias(testRoleAlias);
+        expRole.setRoleId(1);
+        expRole.setRoleName(testRoleName);
+        expRole.setRoleAlias(testRoleAlias);
         expUser.setRoleList(Arrays.asList(expRole));
         final List<User> exp = Arrays.asList(expUser);
 
@@ -69,7 +69,7 @@ public class GetUserServiceTest {
         assertThat(act.size(), is(exp.size()));
 
         final User actUser = act.get(0);
-        assertThat(actUser.getName(), is(testName));
+        assertThat(actUser.getUserName(), is(testName));
         assertThat(actUser.getUserId(), is(testUserId));
         assertThat(actUser.getRoleList().get(0), is(expRole));
     }

@@ -13,5 +13,6 @@ import app.entity.User;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
+    public User findByExtendedAuthenticationIdIs(Integer extendedAuthenticationId);
 
 }

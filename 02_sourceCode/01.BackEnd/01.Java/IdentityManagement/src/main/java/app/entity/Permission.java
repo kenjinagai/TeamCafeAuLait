@@ -31,14 +31,14 @@ public class Permission implements Serializable {
     @ApiModelProperty("Permission id. e.g. create, read, manageUser")
     @NumberFormat
     @NotNull
-    private Integer id;
+    private Integer permissionId;
 
     @Column(nullable = false)
     @ApiModelProperty("Permission name. e.g. guest, user, admin")
     @NotEmpty
-    private String name;
+    private String permissionName;
 
     @Column(nullable = false)
     @ApiModelProperty("Permission alias.")
-    private String alias;
+    private String permissionAlias;
 }
