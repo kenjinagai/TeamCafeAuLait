@@ -23,3 +23,6 @@
 		* `TeamCafeAuLait\02_sourceCode\03.SQL\01.Init\user.sql`
 	2. 以下を実行する
 		* `Query > Execute (All or Selection)`
+
+## バックアップ実施
+1. C:\develop\eclipse>mysqldump --single-transaction -u root -p user > "C:\Users\s0743\Desktop\user.db"

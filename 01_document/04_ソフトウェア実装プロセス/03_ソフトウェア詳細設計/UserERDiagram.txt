@@ -7,46 +7,54 @@ package "MySQL" as ext <<Database>> {
         + user_id [PK]
         ---
         # encoded_password
-        name [FK]
-        extended_authentication [FK]
+        user_name
+        extended_authentication_id [FK]
+        remaining_ticket_id [FK]
     }
     
     entity extended_authentication <<T,FFAA00)>> {
-        id [PK]
+        extended_authentication_id [PK]
         ---
-        user_id
         extended_authentication_value
     }
     
     entity user_has_role <<T, FFAA00>> {
-        user_name [PK]
+        user_id [PK]
+        role_id [PK]
         ---
-        role_id [FK]
     }
     
     entity role_has_permission <<T, FFAA00>> {
-        role_name [PK]
+        role_id [PK]
+        permission_id [PK]
         ---
-        permission_id [FK]
     }
 
     entity permission <<T, FFAA00>> {
-        id [PK]
+        permission_id [PK]
         ---
-        alias
-        name
+        permission_alias
+        permission_name
     }
     
     entity role <<T, FFAA00>> {
-        id [PK]
+        role_id [PK]
         ----
-        alias
-        name
+        role_alias
+        role_name
+    }
+    
+    entity remaining_ticket <<T, FFAA00>> {
+        remaining_ticket_id [PK]
+        ----
+        remaining_dolce
+        remaining_barista
     }
 }
 
 user -down--- extended_authentication
 user -down-|{ user_has_role
+user -down- remaining_ticket
 user_has_role }|-down- role
 role -down-|{ role_has_permission
 role_has_permission }|-down- permission

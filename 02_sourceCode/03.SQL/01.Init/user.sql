@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.7.18, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.18, for Win32 (AMD64)
 --
 -- Host: localhost    Database: user
 -- ------------------------------------------------------
@@ -23,11 +23,9 @@ DROP TABLE IF EXISTS `extended_authentication`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `extended_authentication` (
-  `id` int(11) NOT NULL,
-  `user_id` varchar(255) DEFAULT NULL,
+  `extended_authentication_id` int(11) NOT NULL,
   `extended_authentication_value` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `user_id_UNIQUE` (`user_id`),
+  PRIMARY KEY (`extended_authentication_id`),
   UNIQUE KEY `extended_authentication_value_UNIQUE` (`extended_authentication_value`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,7 +36,7 @@ CREATE TABLE `extended_authentication` (
 
 LOCK TABLES `extended_authentication` WRITE;
 /*!40000 ALTER TABLE `extended_authentication` DISABLE KEYS */;
-INSERT INTO `extended_authentication` VALUES (1,'admin','1'),(2,'guest','2'),(3,'user','3');
+INSERT INTO `extended_authentication` VALUES (1,'1'),(2,'2'),(3,'3');
 /*!40000 ALTER TABLE `extended_authentication` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,10 +48,10 @@ DROP TABLE IF EXISTS `permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `permission` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `alias` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  `permission_id` int(11) NOT NULL AUTO_INCREMENT,
+  `permission_alias` varchar(255) NOT NULL,
+  `permission_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`permission_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -75,11 +73,11 @@ DROP TABLE IF EXISTS `remaining_ticket`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `remaining_ticket` (
-  `ticket_id` int(11) NOT NULL,
+  `remaining_ticket_id` int(11) NOT NULL,
   `remaining_dolce` int(10) unsigned NOT NULL,
   `remaining_barista` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`ticket_id`),
-  UNIQUE KEY `idticket_UNIQUE` (`ticket_id`)
+  PRIMARY KEY (`remaining_ticket_id`),
+  UNIQUE KEY `idticket_UNIQUE` (`remaining_ticket_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -101,11 +99,11 @@ DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `alias` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_8sewwnpamngi6b1dwaa88askk` (`name`)
+  `role_id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_alias` varchar(255) NOT NULL,
+  `role_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`role_id`),
+  UNIQUE KEY `UK_8sewwnpamngi6b1dwaa88askk` (`role_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -127,10 +125,12 @@ DROP TABLE IF EXISTS `role_has_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role_has_permission` (
-  `role_name` varchar(255) NOT NULL,
+  `role_id` int(11) NOT NULL,
   `permission_id` int(11) NOT NULL,
+  PRIMARY KEY (`role_id`,`permission_id`),
   KEY `FK2h8xukv5c6o207f1iyj555146` (`permission_id`),
-  CONSTRAINT `FK2h8xukv5c6o207f1iyj555146` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`)
+  CONSTRAINT `FK2h8xukv5c6o207f1iyj555146` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`),
+  CONSTRAINT `FKc616yaiie179glys9ee1gwsod` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -140,7 +140,7 @@ CREATE TABLE `role_has_permission` (
 
 LOCK TABLES `role_has_permission` WRITE;
 /*!40000 ALTER TABLE `role_has_permission` DISABLE KEYS */;
-INSERT INTO `role_has_permission` VALUES ('ROLE_ADMIN',1),('ROLE_ADMIN',2),('ROLE_ADMIN',3),('ROLE_USER',1),('ROLE_USER',2),('ROLE_GUEST',1);
+INSERT INTO `role_has_permission` VALUES (1,1),(2,1),(3,1),(1,2),(2,2),(1,3);
 /*!40000 ALTER TABLE `role_has_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -154,15 +154,17 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `user_id` varchar(255) NOT NULL,
   `encoded_password` varchar(255) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `extended_authentication` int(11) DEFAULT NULL,
+  `user_name` varchar(50) NOT NULL,
+  `extended_authentication_id` int(11) DEFAULT NULL,
+  `remaining_ticket_id` int(11) DEFAULT NULL,
   `remaining_ticket` int(11) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `UK_gj2fy3dcix7ph7k8684gka40c` (`name`),
-  UNIQUE KEY `extended_authentication_UNIQUE` (`extended_authentication`),
-  KEY `FKhog873vdny78xivil7x3a5wyh` (`remaining_ticket`),
-  CONSTRAINT `FKhog873vdny78xivil7x3a5wyh` FOREIGN KEY (`remaining_ticket`) REFERENCES `remaining_ticket` (`ticket_id`),
-  CONSTRAINT `FKtos75qhl08dib2gbyxk6hypf` FOREIGN KEY (`extended_authentication`) REFERENCES `extended_authentication` (`id`)
+  UNIQUE KEY `UK_gj2fy3dcix7ph7k8684gka40c` (`user_name`),
+  UNIQUE KEY `extended_authentication_UNIQUE` (`extended_authentication_id`),
+  UNIQUE KEY `remaining_ticket_id_UNIQUE` (`remaining_ticket_id`),
+  KEY `FKhog873vdny78xivil7x3a5wyh` (`remaining_ticket_id`),
+  CONSTRAINT `FKhog873vdny78xivil7x3a5wyh` FOREIGN KEY (`remaining_ticket_id`) REFERENCES `remaining_ticket` (`remaining_ticket_id`),
+  CONSTRAINT `FKtos75qhl08dib2gbyxk6hypf` FOREIGN KEY (`extended_authentication_id`) REFERENCES `extended_authentication` (`extended_authentication_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -172,38 +174,8 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('admin','admin','鈴木一朗',1,1),('guest','guest','佐藤花子',2,2),('user','user','田中太郎',3,3);
+INSERT INTO `user` VALUES ('admin','admin','鈴木一朗',1,1,NULL),('guest','guest','佐藤花子',2,2,NULL),('user','user','田中太郎',3,3,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `user_has_extended_authentication`
---
-
-DROP TABLE IF EXISTS `user_has_extended_authentication`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user_has_extended_authentication` (
-  `user_user_id` varchar(255) NOT NULL,
-  `user_has_extended_authenticationcol` varchar(255) DEFAULT NULL,
-  `extended_authentication_id` int(11) DEFAULT NULL,
-  `user_id` varchar(255) NOT NULL,
-  PRIMARY KEY (`user_user_id`),
-  UNIQUE KEY `user_has_extended_authenticationcol_UNIQUE` (`user_has_extended_authenticationcol`),
-  KEY `FKpufdvf1rcrdxh34yajv8k44o1` (`extended_authentication_id`),
-  KEY `FKgl6rb85stc49s6eh09c53147p` (`user_id`),
-  CONSTRAINT `FKgl6rb85stc49s6eh09c53147p` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-  CONSTRAINT `FKpufdvf1rcrdxh34yajv8k44o1` FOREIGN KEY (`extended_authentication_id`) REFERENCES `extended_authentication` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_has_extended_authentication`
---
-
-LOCK TABLES `user_has_extended_authentication` WRITE;
-/*!40000 ALTER TABLE `user_has_extended_authentication` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_has_extended_authentication` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -214,10 +186,12 @@ DROP TABLE IF EXISTS `user_has_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_has_role` (
-  `user_name` varchar(50) NOT NULL,
+  `user_id` varchar(255) NOT NULL,
   `role_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`role_id`),
   KEY `FKc1m07gjgx777ukpfw6wa94dfh` (`role_id`),
-  CONSTRAINT `FKc1m07gjgx777ukpfw6wa94dfh` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
+  CONSTRAINT `FKc1m07gjgx777ukpfw6wa94dfh` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`),
+  CONSTRAINT `FKdtkvc2iy3ph1rkvd67yl2t13m` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -227,7 +201,7 @@ CREATE TABLE `user_has_role` (
 
 LOCK TABLES `user_has_role` WRITE;
 /*!40000 ALTER TABLE `user_has_role` DISABLE KEYS */;
-INSERT INTO `user_has_role` VALUES ('佐藤花子',3),('鈴木一朗',1),('田中太郎',2);
+INSERT INTO `user_has_role` VALUES ('admin',1),('user',2),('guest',3);
 /*!40000 ALTER TABLE `user_has_role` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -240,4 +214,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-03 21:55:15
+-- Dump completed on 2018-05-27 16:47:52
